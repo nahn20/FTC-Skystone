@@ -741,9 +741,6 @@
     <string name="preferred_imu_name">imu</string>
     <string name="program_and_manage_activity">Program &amp; Manage</string>
     <string name="program_and_manage_menu_item">Program &amp; Manage</string>
-    <string name="programming_mode">Programming Mode</string>
-    <string name="programming_mode_activity">Programming Mode</string>
-    <string name="programming_mode_menu_item">Programming Mode</string>
     <string name="progressPleaseWait">Please wait</string>
     <string name="progressUpdatingDeviceFirmware">Updating Expansion Hub firmware (%s)</string>
     <string name="quotes">\"%s\"</string>
@@ -846,7 +843,6 @@
     <string name="title_activity_wifi_channel_selector">Wifi Channel Selection</string>
     <string name="title_activity_wifi_remembered_groups_editor">Wifi Remembered Groups Editor</string>
     <string name="toastCantCreateRobotConfigFilesDir">Can\'t create the Robot Config Files directory!</string>
-    <string name="toastConfigureRobotBeforeProgrammingMode">You must Configure Robot before starting Programming Mode.</string>
     <string name="toastDisableWifi">Disabling WiFi</string>
     <string name="toastDisableWifiWarn">WiFi disable in\u0020</string>
     <string name="toastDisconnectedFromWifiDirect">Successfully disconnected from WiFi Direct</string>
@@ -869,7 +865,7 @@
     <string name="toastWifiConfigurationComplete">Configuration Complete</string>
     <string name="toastWifiP2pChannelChangeRequestedDS">Asked Robot Controller to change to channel \'%s\'. A restart of the Driver Station may be needed.</string>
     <string name="toastWifiP2pRememberedGroupsCleared">Wifi Direct remembered groups have been cleared from the robot controller.</string>
-    <string name="toastWifiUpBeforeProgrammingMode">The Robot Controller must be fully up and running before starting Programming Mode.  Is Wifi turned on in settings?</string>
+    <string name="toastWifiUpBeforeProgrammingMode">The Robot Controller must be fully up and running before entering Program and Manage Mode.</string>
     <string name="tokenThemeBlue">blue</string>
     <string name="tokenThemeGreen">green</string>
     <string name="tokenThemeOrange">orange</string>

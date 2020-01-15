@@ -1,5 +1,5 @@
 #Internal package file, do not edit.
-#Thu Sep 12 14:58:10 EDT 2019
+#Wed Jan 15 14:52:57 EST 2020
 20.base=/Users/Piter/Documents/GitHub/FTC-Skystone/TeamCode/build/intermediates/merged_assets/debug/out
 143.base=/Users/Piter/Documents/GitHub/FTC-Skystone/TeamCode/build/intermediates/merged_assets/debug/out
 237.path=java/css/tether.min.css
@@ -22,7 +22,7 @@
 61.path=blocks/samples/ConceptVuforiaNavSkystoneWebcam.blk
 193.path=css/blocks_offline.css
 364.path=java/css/angular-resizable.css
-270.base=/Users/Piter/Documents/GitHub/FTC-Skystone/TeamCode/build/intermediates/merged_assets/debug/out
+270.base=/Users/Piter/Documents/GitHub/FTC-Skystone/TeamCode/build/intermediates/dex/debug/mergeDexDebug/out
 100.base=/Users/Piter/Documents/GitHub/FTC-Skystone/TeamCode/build/intermediates/merged_assets/debug/out
 416.set=ASSET
 69.baseType=DIRECTORY
@@ -65,7 +65,7 @@
 325.set=ASSET
 99.base=/Users/Piter/Documents/GitHub/FTC-Skystone/TeamCode/build/intermediates/merged_assets/debug/out
 131.path=java/templates/SensorColor
-302.path=java/templates/SampleRevBlinkinLedDriver
+302.path=js/split.min.js.map
 41.path=java/js/theme-github.js
 164.path=blocks/images/ftcAnalogInput.png
 248.set=ASSET
@@ -101,7 +101,7 @@
 338.baseType=DIRECTORY
 366.baseType=DIRECTORY
 394.baseType=DIRECTORY
-281.path=lib/arm64-v8a/libRobotCore.so
+281.path=css/bootstrap-theme.min.css
 372.baseType=DIRECTORY
 12.path=java/js/angular-messages.min.js
 315.path=java/js/antlr4/package.json
@@ -181,7 +181,7 @@
 372.set=ASSET
 120.baseType=DIRECTORY
 16.set=ASSET
-265.path=java/js/antlr4/CharStreams.js
+265.path=ftcblockly/generators/ftcjava.js
 298.path=java/js/antlr4/atn/LexerActionExecutor.js
 295.set=ASSET
 81.base=/Users/Piter/Documents/GitHub/FTC-Skystone/TeamCode/build/intermediates/merged_assets/debug/out
@@ -211,7 +211,7 @@
 416.path=java/js/jquery.position.js
 322.base=/Users/Piter/Documents/GitHub/FTC-Skystone/TeamCode/build/intermediates/merged_assets/debug/out
 184.base=/Users/Piter/Documents/GitHub/FTC-Skystone/TeamCode/build/intermediates/merged_assets/debug/out
-278.path=java/js/antlr4/atn/ATNConfig.js
+278.path=StonesAndChips.dat
 380.set=ASSET
 24.set=ASSET
 94.base=/Users/Piter/Documents/GitHub/FTC-Skystone/TeamCode/build/intermediates/merged_assets/debug/out
@@ -320,13 +320,13 @@
 169.set=ASSET
 158.base=/Users/Piter/Documents/GitHub/FTC-Skystone/TeamCode/build/intermediates/merged_assets/debug/out
 329.base=/Users/Piter/Documents/GitHub/FTC-Skystone/TeamCode/build/intermediates/merged_assets/debug/out
-270.path=java/js/antlr4/polyfills/fromcodepoint.js
+270.path=classes.dex
 68.base=/Users/Piter/Documents/GitHub/FTC-Skystone/TeamCode/build/intermediates/merged_assets/debug/out
 100.path=java/templates/ConceptI2cAddressChange
 94.set=ASSET
 345.set=ASSET
 133.path=frame.html
-304.path=blocks/FtcBlocksProjects_common.js
+304.path=blocks/images/ftcVoltageSensor.png
 368.baseType=DIRECTORY
 166.path=blockly/media/quote1.png
 268.set=ASSET
@@ -394,7 +394,7 @@
 84.baseType=DIRECTORY
 126.baseType=DIRECTORY
 154.baseType=DIRECTORY
-273.path=java/js/antlr4/BufferedTokenStream.js
+273.path=css/blocks_common.css
 350.base=/Users/Piter/Documents/GitHub/FTC-Skystone/TeamCode/build/intermediates/merged_assets/debug/out
 330.set=ASSET
 310.baseType=DIRECTORY
@@ -426,7 +426,7 @@
 236.base=/Users/Piter/Documents/GitHub/FTC-Skystone/TeamCode/build/intermediates/merged_assets/debug/out
 407.base=/Users/Piter/Documents/GitHub/FTC-Skystone/TeamCode/build/intermediates/merged_assets/debug/out
 361.set=ASSET
-269.base=/Users/Piter/Documents/GitHub/FTC-Skystone/TeamCode/build/intermediates/dex/debug/mergeDexDebug/out
+269.base=/Users/Piter/Documents/GitHub/FTC-Skystone/TeamCode/build/intermediates/merged_assets/debug/out
 211.path=RobotConfigTaxonomy.xml
 284.set=ASSET
 162.set=NATIVE_RESOURCE
@@ -451,7 +451,7 @@
 409.set=ASSET
 392.set=ASSET
 36.set=ASSET
-267.path=css/frame_offline.less
+267.path=java/templates/ConceptVuforiaSkyStoneNavigationWebcam
 50.base=/Users/Piter/Documents/GitHub/FTC-Skystone/TeamCode/build/intermediates/merged_assets/debug/out
 369.baseType=DIRECTORY
 83.base=/Users/Piter/Documents/GitHub/FTC-Skystone/TeamCode/build/intermediates/merged_assets/debug/out
@@ -587,7 +587,7 @@
 234.set=ASSET
 127.base=/Users/Piter/Documents/GitHub/FTC-Skystone/TeamCode/build/intermediates/merged_assets/debug/out
 112.set=ASSET
-272.path=css/blocks_common.css
+272.path=toolbox/vuforia.xml
 188.baseType=DIRECTORY
 102.path=lib/arm64-v8a/libimage_utils.so
 316.baseType=DIRECTORY
@@ -598,7 +598,7 @@
 350.baseType=DIRECTORY
 135.path=css/base.css
 391.base=/Users/Piter/Documents/GitHub/FTC-Skystone/TeamCode/build/intermediates/transforms/mergeJniLibs/debug/0
-306.path=blockly/msg/messages.js
+306.path=blocks/quaternion.js
 288.set=ASSET
 168.path=java/js/keybinding-emacs.js
 45.path=java/js/antlr4/README.md
@@ -655,7 +655,7 @@
 130.baseType=DIRECTORY
 413.path=blocks/images/ftcDigitalChannel.png
 181.base=/Users/Piter/Documents/GitHub/FTC-Skystone/TeamCode/build/intermediates/merged_assets/debug/out
-275.path=java/js/main.js
+275.path=ftcblockly/generators/ftcjava/loops.js
 352.base=/Users/Piter/Documents/GitHub/FTC-Skystone/TeamCode/build/intermediates/merged_assets/debug/out
 350.set=ASSET
 91.base=/Users/Piter/Documents/GitHub/FTC-Skystone/TeamCode/build/intermediates/merged_assets/debug/out
@@ -699,7 +699,7 @@
 398.base=/Users/Piter/Documents/GitHub/FTC-Skystone/TeamCode/build/intermediates/merged_assets/debug/out
 228.base=/Users/Piter/Documents/GitHub/FTC-Skystone/TeamCode/build/intermediates/merged_assets/debug/out
 340.path=blocks/samples/SensorREVColorDistance.blk
-281.set=NATIVE_RESOURCE
+281.set=ASSET
 373.path=java/js/antlr4/error/DiagnosticErrorListener.js
 203.path=blocks/ultrasonic_sensor.js
 189.baseType=DIRECTORY
@@ -710,10 +710,10 @@
 236.path=blocks/images.css
 407.path=java/js/mode-properties.js
 351.baseType=DIRECTORY
-269.path=classes.dex
+269.path=java/js/worker-json.js
 52.base=/Users/Piter/Documents/GitHub/FTC-Skystone/TeamCode/build/intermediates/merged_assets/debug/out
 56.set=ASSET
-307.set=NATIVE_RESOURCE
+307.set=ASSET
 355.base=/Users/Piter/Documents/GitHub/FTC-Skystone/TeamCode/build/intermediates/merged_assets/debug/out
 85.base=/Users/Piter/Documents/GitHub/FTC-Skystone/TeamCode/build/intermediates/merged_assets/debug/out
 388.base=/Users/Piter/Documents/GitHub/FTC-Skystone/TeamCode/build/intermediates/merged_assets/debug/out
@@ -798,11 +798,11 @@
 95.set=ASSET
 346.set=ASSET
 96.path=blocks/ir_seeker_sensor.js
-269.set=DEX
+269.set=ASSET
 36.base=/Users/Piter/Documents/GitHub/FTC-Skystone/TeamCode/build/intermediates/merged_assets/debug/out
 147.set=ASSET
 339.base=/Users/Piter/Documents/GitHub/FTC-Skystone/TeamCode/build/intermediates/merged_assets/debug/out
-280.path=css/bootstrap-theme.min.css
+280.path=blocks/samples/BasicPOVDrive.blk
 378.baseType=DIRECTORY
 11.path=toolbox/misc.xml
 384.baseType=DIRECTORY
@@ -887,7 +887,7 @@
 56.baseType=DIRECTORY
 362.set=ASSET
 62.baseType=DIRECTORY
-264.path=ftcblockly/generators/ftcjava.js
+264.path=toolbox/android_accelerometer.xml
 90.baseType=DIRECTORY
 104.baseType=DIRECTORY
 132.baseType=DIRECTORY
@@ -920,7 +920,7 @@
 321.base=/Users/Piter/Documents/GitHub/FTC-Skystone/TeamCode/build/intermediates/merged_assets/debug/out
 385.baseType=DIRECTORY
 183.base=/Users/Piter/Documents/GitHub/FTC-Skystone/TeamCode/build/intermediates/merged_assets/debug/out
-277.path=StonesAndChips.dat
+277.path=blocks/tfod_rover_ruckus.js
 370.set=ASSET
 14.set=ASSET
 93.base=/Users/Piter/Documents/GitHub/FTC-Skystone/TeamCode/build/intermediates/merged_assets/debug/out
@@ -935,7 +935,7 @@
 311.base=/Users/Piter/Documents/GitHub/FTC-Skystone/TeamCode/build/intermediates/merged_assets/debug/out
 173.base=/Users/Piter/Documents/GitHub/FTC-Skystone/TeamCode/build/intermediates/merged_assets/debug/out
 344.base=/Users/Piter/Documents/GitHub/FTC-Skystone/TeamCode/build/intermediates/merged_assets/debug/out
-270.set=ASSET
+270.set=DEX
 319.baseType=DIRECTORY
 347.baseType=DIRECTORY
 377.base=/Users/Piter/Documents/GitHub/FTC-Skystone/TeamCode/build/intermediates/merged_assets/debug/out
@@ -1037,7 +1037,7 @@
 84.set=ASSET
 335.set=ASSET
 132.path=java/templates/ConceptTensorFlowObjectDetection
-303.path=blocks/images/ftcVoltageSensor.png
+303.path=java/templates/SampleRevBlinkinLedDriver
 42.path=fonts/fontawesome-webfont.svg
 165.path=blocks/images/ftcLinearOpMode.png
 258.set=ASSET
@@ -1159,7 +1159,7 @@
 404.path=favicon.ico
 382.set=ASSET
 26.set=ASSET
-266.path=java/templates/ConceptVuforiaSkyStoneNavigationWebcam
+266.path=java/js/antlr4/CharStreams.js
 299.path=blocks/tfod_recognition.js
 82.base=/Users/Piter/Documents/GitHub/FTC-Skystone/TeamCode/build/intermediates/merged_assets/debug/out
 129.path=lib/armeabi-v7a/libobject_tracking.so
@@ -1195,7 +1195,7 @@
 417.path=ftcblockly/generators/ftcjava/logic.js
 323.base=/Users/Piter/Documents/GitHub/FTC-Skystone/TeamCode/build/intermediates/merged_assets/debug/out
 185.base=/Users/Piter/Documents/GitHub/FTC-Skystone/TeamCode/build/intermediates/transforms/mergeJniLibs/debug/0
-279.path=blocks/samples/BasicPOVDrive.blk
+279.path=java/js/antlr4/atn/ATNConfig.js
 62.base=/Users/Piter/Documents/GitHub/FTC-Skystone/TeamCode/build/intermediates/merged_assets/debug/out
 407.set=ASSET
 390.set=ASSET
@@ -1279,7 +1279,7 @@
 73.set=ASSET
 324.set=ASSET
 136.base=/Users/Piter/Documents/GitHub/FTC-Skystone/TeamCode/build/intermediates/merged_assets/debug/out
-307.base=/Users/Piter/Documents/GitHub/FTC-Skystone/TeamCode/build/intermediates/transforms/mergeJniLibs/debug/0
+307.base=/Users/Piter/Documents/GitHub/FTC-Skystone/TeamCode/build/intermediates/merged_assets/debug/out
 169.base=/Users/Piter/Documents/GitHub/FTC-Skystone/TeamCode/build/intermediates/merged_assets/debug/out
 46.base=/Users/Piter/Documents/GitHub/FTC-Skystone/TeamCode/build/intermediates/merged_assets/debug/out
 388.baseType=DIRECTORY
@@ -1306,7 +1306,7 @@
 126.base=/Users/Piter/Documents/GitHub/FTC-Skystone/TeamCode/build/intermediates/merged_assets/debug/out
 102.set=NATIVE_RESOURCE
 159.base=/Users/Piter/Documents/GitHub/FTC-Skystone/TeamCode/build/intermediates/transforms/mergeJniLibs/debug/0
-271.path=toolbox/vuforia.xml
+271.path=java/js/antlr4/polyfills/fromcodepoint.js
 69.base=/Users/Piter/Documents/GitHub/FTC-Skystone/TeamCode/build/intermediates/merged_assets/debug/out
 101.path=java/js/antlr4/atn/ATNConfigSet.js
 400.set=ASSET
@@ -1315,7 +1315,7 @@
 134.path=blockly/media/delete.ogg
 390.base=/Users/Piter/Documents/GitHub/FTC-Skystone/TeamCode/build/intermediates/merged_assets/debug/out
 356.baseType=DIRECTORY
-305.path=blocks/quaternion.js
+305.path=blocks/FtcBlocksProjects_common.js
 362.baseType=DIRECTORY
 390.baseType=DIRECTORY
 167.path=toolbox/linear_op_mode.xml
@@ -1378,7 +1378,7 @@
 412.path=java/js/antlr4/atn/ATNDeserializer.js
 170.baseType=DIRECTORY
 180.base=/Users/Piter/Documents/GitHub/FTC-Skystone/TeamCode/build/intermediates/merged_assets/debug/out
-274.path=ftcblockly/generators/ftcjava/loops.js
+274.path=java/js/antlr4/BufferedTokenStream.js
 351.base=/Users/Piter/Documents/GitHub/FTC-Skystone/TeamCode/build/intermediates/merged_assets/debug/out
 340.set=ASSET
 90.base=/Users/Piter/Documents/GitHub/FTC-Skystone/TeamCode/build/intermediates/merged_assets/debug/out
@@ -1432,7 +1432,7 @@
 329.baseType=DIRECTORY
 357.baseType=DIRECTORY
 46.set=ASSET
-268.path=java/js/worker-json.js
+268.path=css/frame_offline.less
 51.base=/Users/Piter/Documents/GitHub/FTC-Skystone/TeamCode/build/intermediates/merged_assets/debug/out
 363.baseType=DIRECTORY
 391.baseType=DIRECTORY
@@ -1493,7 +1493,7 @@ count=422
 115.baseType=DIRECTORY
 143.baseType=DIRECTORY
 72.path=blocks/images/ftcServo.png
-281.base=/Users/Piter/Documents/GitHub/FTC-Skystone/TeamCode/build/intermediates/transforms/mergeJniLibs/debug/0
+281.base=/Users/Piter/Documents/GitHub/FTC-Skystone/TeamCode/build/intermediates/merged_assets/debug/out
 12.base=/Users/Piter/Documents/GitHub/FTC-Skystone/TeamCode/build/intermediates/merged_assets/debug/out
 404.set=ASSET
 359.set=ASSET
@@ -1583,7 +1583,7 @@ count=422
 19.set=ASSET
 136.path=java/js/antlr4/dfa/DFAState.js
 392.base=/Users/Piter/Documents/GitHub/FTC-Skystone/TeamCode/build/intermediates/merged_assets/debug/out
-307.path=lib/arm64-v8a/libc++_shared.so
+307.path=blockly/msg/messages.js
 298.set=ASSET
 169.path=css/SourceCodePro.css
 46.path=blocks/pidf_coefficients.js
@@ -1597,7 +1597,7 @@ count=422
 230.path=toolbox/vuforiaSkyStone_initialize_withCameraDirection.xml
 401.path=blockly/blockly_compressed.js
 352.set=ASSET
-263.path=toolbox/android_accelerometer.xml
+263.path=js/split.min.js
 68.baseType=DIRECTORY
 6.baseType=DIRECTORY
 74.baseType=DIRECTORY
@@ -1633,7 +1633,7 @@ count=422
 414.path=blocks/images/ftcAccelerationSensor.png
 320.base=/Users/Piter/Documents/GitHub/FTC-Skystone/TeamCode/build/intermediates/merged_assets/debug/out
 182.base=/Users/Piter/Documents/GitHub/FTC-Skystone/TeamCode/build/intermediates/merged_assets/debug/out
-276.path=blocks/tfod_rover_ruckus.js
+276.path=java/js/main.js
 353.base=/Users/Piter/Documents/GitHub/FTC-Skystone/TeamCode/build/intermediates/merged_assets/debug/out
 397.baseType=DIRECTORY
 360.set=ASSET

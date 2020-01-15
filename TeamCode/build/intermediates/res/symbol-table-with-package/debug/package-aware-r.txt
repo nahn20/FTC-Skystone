@@ -173,7 +173,6 @@ drawable notify_panel_notification_icon_bg
 drawable skystone_background
 id RelativeLayout
 id action_about
-id action_blocks
 id action_configure_robot
 id action_container
 id action_divider
@@ -182,12 +181,10 @@ id action_help
 id action_image
 id action_inspection_mode
 id action_program_and_manage
-id action_programming_mode
 id action_restart_robot
 id action_settings
 id action_text
 id actions
-id active_connections
 id activity_fix_misconfig_wifi_direct
 id addButton
 id addressListCaption
@@ -232,7 +229,6 @@ id device_interface_module_name
 id devices_holder
 id devices_info_btn
 id disconnect_from_wifidirect
-id display_server_log_button
 id doneButton
 id dropdown_layout
 id editTextResult
@@ -270,7 +266,6 @@ id info
 id infoButton
 id info_btn
 id inspectionRootLayout
-id instructions_and_status_container
 id isCCInstalled
 id isDSInstalled
 id isRCInstalled
@@ -300,8 +295,6 @@ id listView_devices
 id load_bottom
 id loadingIndicator
 id loadingIndicatorOverlay
-id log
-id log_container
 id lynxAddressButtons
 id lynxAddressListInstructions
 id lynxFirmwareInstructionsPost
@@ -319,7 +312,6 @@ id moduleList
 id moduleSerialText
 id monitorContainer
 id motors_title
-id network_name
 id new_button
 id normal
 id notification_background
@@ -328,7 +320,6 @@ id notification_main_column_container
 id orange_end_of_list_anchor
 id osVersion
 id osVersionLayout
-id passphrase
 id permDeniedText
 id port0
 id port1
@@ -355,8 +346,6 @@ id row_port_i2c
 id scanButton
 id scrollView
 id serialNumber
-id server_status
-id server_url
 id servos_title
 id spinnerChooseAddress
 id swapButton
@@ -382,7 +371,6 @@ id textGamepad2
 id textNetworkConnectionStatus
 id textOpMode
 id textPleaseWait
-id textRemoteProgrammingMode
 id textRobotStatus
 id textView
 id textView10
@@ -410,7 +398,6 @@ id txtIsRCInstalled
 id txtManufacturer
 id txtModel
 id webView
-id webViewBlockly
 id webViewBlocksRuntime
 id widiConnected
 id widiName
@@ -418,7 +405,6 @@ id wifiConnected
 id wifiDisabledNotification
 id wifiEnabled
 integer status_bar_notification_info_maxnum
-layout activity_blocks
 layout activity_config_wifi_direct
 layout activity_configure_from_template
 layout activity_ftc_configuration
@@ -432,7 +418,6 @@ layout activity_inspection
 layout activity_load
 layout activity_permissions_validator
 layout activity_program_and_manage
-layout activity_programming_mode
 layout activity_swap_usb_devices
 layout activity_view_logs
 layout analog_input_device
@@ -1009,9 +994,6 @@ string prefedit_wifi_automute_summary
 string preferred_imu_name
 string program_and_manage_activity
 string program_and_manage_menu_item
-string programming_mode
-string programming_mode_activity
-string programming_mode_menu_item
 string progressPleaseWait
 string progressUpdatingDeviceFirmware
 string quotes
@@ -1114,7 +1096,6 @@ string title_activity_load
 string title_activity_wifi_channel_selector
 string title_activity_wifi_remembered_groups_editor
 string toastCantCreateRobotConfigFilesDir
-string toastConfigureRobotBeforeProgrammingMode
 string toastDisableWifi
 string toastDisableWifiWarn
 string toastDisconnectedFromWifiDirect

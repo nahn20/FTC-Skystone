@@ -40,6 +40,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection.BACK;
+//Shoop Kinda High Pos: 851
+//Zhoop Kinda High Pos: 730
+
 
 /*COPY & PASTE REFERENCE
 //Time Limited Loop Action
@@ -96,15 +99,8 @@ public class AbsoluteAuto extends LinearOpMode {
         ldl.init(hardwareMap);
         ldl.imu();
 
-        ldl.frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        ldl.backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        ldl.backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        ldl.frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        ldl.frontLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        ldl.backLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        ldl.backRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        ldl.frontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+		ldl.resetDrive();
+        ldl.runWithoutEncoderDrive();
 
         //VUFORIA STUFF\\
         /*
@@ -169,6 +165,8 @@ public class AbsoluteAuto extends LinearOpMode {
 		targetsSkyStone.activate();
 		//Start\\
 
+		slideFuckExtend();
+
         //This part does stuff to get to the blocks
 		motorPos1 = saveMotorPos(); //Saves motor pos to return to later
 		scanForSkyStone(1, stoneTarget); //Slowly drives sideways to find sky stone
@@ -177,6 +175,7 @@ public class AbsoluteAuto extends LinearOpMode {
         returnToMotorPos(motorPos2);
 		returnToMotorPos(motorPos1);
         //This part brings the blocks back to the platform
+
     }
     public boolean detectTarget(VuforiaTrackable target) {
         if (((VuforiaTrackableDefaultListener)target.getListener()).isVisible()) {
@@ -224,6 +223,38 @@ public class AbsoluteAuto extends LinearOpMode {
         ldl.succ.setPower(0);
         ldl.succc.setPower(0);
     }
+	public void slideFuckExtend(){
+		ldl.shoop.setTargetPosition(851);
+		ldl.zhoop.setTargetPosition(730);
+		ldl.shoop.setPower(1);
+		ldl.zhoop.setPower(1);
+		ldl.uwu.setPower(-1);
+		sleepNotSleep(1600);
+		ldl.shoop.setTargetPosition(0);
+		ldl.zhoop.setTargetPosition(0);
+		ldl.uwu.setPower(0);
+		sleepNotSleep(500);
+		ldl.shoop.setPower(0);
+		ldl.zhoop.setPower(0);
+	}
+	public void slideFuckRetract(){
+		ldl.shoop.setTargetPosition(851);
+		ldl.zhoop.setTargetPosition(730);
+		ldl.shoop.setPower(1);
+		ldl.zhoop.setPower(1);
+		sleepNotSleep(500);
+
+		ldl.uwu.setPower(1);
+		sleepNotSleep(700);
+		ldl.uwu.setPower(0);
+		sleepNotSleep(300);
+
+		ldl.shoop.setTargetPosition(0);
+		ldl.zhoop.setTargetPosition(0);
+		sleepNotSleep(500);
+		ldl.shoop.setPower(0);
+		ldl.zhoop.setPower(0);
+	}
     public void returnToMotorPos(int[] motorSave){ //Drives the robot to a certain set of encoder values
         ldl.runToPosDrive();
         ldl.frontLeft.setTargetPosition(motorSave[0]);

@@ -14,9 +14,9 @@ public class ladle{
 
     //DRIVE//
     public DcMotor frontLeft   = null;
-    public DcMotor frontRight  = null;
     public DcMotor backLeft    = null;
     public DcMotor backRight   = null;
+	public DcMotor frontRight  = null;
 
 
     //Big Boi Slides

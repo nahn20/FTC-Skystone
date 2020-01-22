@@ -10,8 +10,6 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-//Welp that's number four
-//And five
 @TeleOp(name="AbsoluteTeleOp", group="Pushboat")
 public class AbsoluteTeleOp extends LinearOpMode {
     ladle ldl = new ladle();
@@ -37,7 +35,7 @@ public class AbsoluteTeleOp extends LinearOpMode {
         ldl.runWithoutEncoderDrive();
 
         double startTime = 0;
-
+        
         while(!opModeIsActive()){
             telemetry.addData("shoop position", ldl.shoop.getCurrentPosition());
             telemetry.addData("zhoop position", ldl.zhoop.getCurrentPosition());
@@ -58,8 +56,8 @@ public class AbsoluteTeleOp extends LinearOpMode {
     }
     //Player 1
     public void drive() {
-        double stick_x = gamepad1.left_stick_x;
-        double stick_y = -gamepad1.left_stick_y;
+        double stick_x = -gamepad1.left_stick_x;
+        double stick_y = gamepad1.left_stick_y;
         double pX = 0;
         double pY = 0;
         double pRot = 0;
@@ -152,8 +150,8 @@ public class AbsoluteTeleOp extends LinearOpMode {
 	int shoopLockPos = 0;
 	int zhoopLockPos = 0;
     public void slide(){
-        int shoopMax = 1902; //Fill me in later dadddy OwO
-		int zhoopMax = 1936;
+        int shoopMax = 2097; //Fill me in later dadddy OwO
+		int zhoopMax = 1974;
         ldl.uwu.setPower(-gamepad2.left_stick_x);
 		if(!toggleMap2.left_bumper){ //Manual
 			ldl.shoop.setTargetPosition(Math.round(Math.abs(gamepad2.left_stick_y)*shoopMax));

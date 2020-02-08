@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.util.Range;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
@@ -11,8 +10,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-@TeleOp(name="AbsoluteTeleOp", group="Pushboat")
-public class AbsoluteTeleOp extends LinearOpMode {
+@TeleOp(name="DriveEncoderFinder", group="Pushboat")
+public class DriveEncoderFinder extends LinearOpMode {
     ladle ldl = new ladle();
     toggleMap toggleMap1 = new toggleMap();
     useMap useMap1 = new useMap();
@@ -36,24 +35,24 @@ public class AbsoluteTeleOp extends LinearOpMode {
         ldl.runWithoutEncoderDrive();
 
         double startTime = 0;
+        
         while(!opModeIsActive()){
             telemetry.addData("shoop position", ldl.shoop.getCurrentPosition());
             telemetry.addData("zhoop position", ldl.zhoop.getCurrentPosition());
-			telemetry.addData("uwu position", ldl.uwu.getCurrentPosition());
             telemetry.update();
         }
 		ldl.shoop.setPower(1);
 		ldl.zhoop.setPower(1);
-		ldl.uwu.setPower(1);
         startTime = runtime.milliseconds();
         while(opModeIsActive()){
             updateKeys();
             //Player 1
             drive();
-            suc();
-            //Player 2
-            slide();
-            flerp();
+			reset();
+			telemetry.addData("fl", ldl.frontLeft.getCurrentPosition());
+			telemetry.addData("bl", ldl.backLeft.getCurrentPosition());
+			telemetry.addData("br", ldl.backRight.getCurrentPosition());
+			telemetry.addData("fr", ldl.frontRight.getCurrentPosition());
 			telemetry.update();
         }
     }
@@ -121,95 +120,25 @@ public class AbsoluteTeleOp extends LinearOpMode {
             ldl.mecanumDrive(pX, pY, pRot);
         }
     }
-    public void suc(){
-        if(toggleMap1.left_bumper && gamepad1.right_trigger == 0){
-            ldl.succ.setPower(1);
-			telemetry.addData("Intake", "ON");
-        }
-        else if(gamepad1.left_trigger > 0){
-            ldl.succ.setPower(gamepad1.left_trigger);
-			telemetry.addData("Intake", "ON");
-        }
-        if(gamepad1.right_trigger > 0){
-            ldl.succ.setPower(-gamepad1.right_trigger);
-			telemetry.addData("Intake", "OUTTAKING");
-        }
-		if(gamepad1.left_trigger == 0 && gamepad1.right_trigger == 0 && !toggleMap1.left_bumper){
-			ldl.succ.setPower(0);
-			telemetry.addData("Intake", "OFF");
+	public void reset(){
+		if(gamepad1.b){
+			ldl.resetDrive();
+			ldl.runWithoutEncoderDrive();
 		}
-    }
-    //Player 2
-	int shoopLockPos = 0;
-	int zhoopLockPos = 0;
-	int uwuLockPos = 0;
-    public void slide(){
-		if(gamepad2.a && (ldl.uwu.getCurrentPosition() < 30) || gamepad2.left_bumper){ //Low load position
-			shoopLockPos = ldl.shoopLoad;
-			zhoopLockPos = ldl.zhoopLoad;
-		}
-		if(gamepad2.x){ //Medium load position
-			shoopLockPos = ldl.shoopClearance;
-			zhoopLockPos = ldl.zhoopClearance;
-		}
-		if(toggleMap2.x){
-			shoopLockPos = ldl.shoopDeposit;
-			if(Math.abs(shoopLockPos-ldl.shoopDeposit) < 20){
-				toggleMap2.x = false;
-			}
-		}
-		if(gamepad2.y){ //High load position
-			shoopLockPos = ldl.shoopMax;
-			zhoopLockPos = ldl.zhoopMax;
-		}
-		shoopLockPos += Math.round(-gamepad2.right_stick_y*ldl.shoopMax*0.005);
-		zhoopLockPos += Math.round(-gamepad2.right_stick_y*ldl.zhoopMax*0.005);
-		uwuLockPos += Math.round(gamepad2.right_stick_x*ldl.uwuMax*0.01);
-		if(Math.abs(gamepad2.right_stick_x) > 0.3){
-			toggleMap2.x = false;
-		}
-
-		shoopLockPos = Range.clip(shoopLockPos, 0, ldl.shoopMax);
-		zhoopLockPos = Range.clip(zhoopLockPos, 0, ldl.zhoopMax);
-		uwuLockPos = Range.clip(uwuLockPos, 0, ldl.uwuMax);
-
-		ldl.shoop.setTargetPosition(shoopLockPos);
-		ldl.zhoop.setTargetPosition(zhoopLockPos);
-		boolean verticalClearance = dl.shoop.getCurrentPosition() > ldl.shoopMinClearance && ldl.zhoop.getCurrentPosition() > ldl.zhoopMinClearance;
-		if((verticalClearance || (!verticalClearance && uwuLockPos > ldl.uwuContained) || gamepad2.left_bumper){
-			ldl.uwu.setTargetPosition(uwuLockPos);
-		}
-    }
-	double holdPower = 0;
-    public void flerp(){
-		if(!toggleMap2.dpad_left){
-			ldl.crGrap.setPower(gamepad2.left_stick_x);
-		}
-		if(toggleMap2.dpad_left){
-			ldl.crGrap.setPower(-1);
-		}
-    }
+	}
     ////////////////////////////////
     // TOGGLES ////////// USE MAP //
     //[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[
 
     public void updateKeys(){
-		telemetry.addData("left_bumper", gamepad1.left_bumper);
-		if(gamepad1.left_bumper && cdCheck(useMap1.left_bumper, 200)){ 
-            toggleMap1.left_bumper = toggle(toggleMap1.left_bumper);
-            useMap1.left_bumper = runtime.milliseconds();
+		if(gamepad2.left_bumper && cdCheck(useMap2.left_bumper, 200)){ 
+            toggleMap2.left_bumper = toggle(toggleMap2.left_bumper);
+            useMap2.left_bumper = runtime.milliseconds();
         }
-		if(gamepad2.x && cdCheck(useMap2.x, 200)){ 
-            toggleMap2.x = toggle(toggleMap2.x);
-            useMap2.x = runtime.milliseconds();
+		if(gamepad2.right_bumper && cdCheck(useMap2.right_bumper, 200)){ 
+            toggleMap2.right_bumper = toggle(toggleMap2.right_bumper);
+            useMap2.right_bumper = runtime.milliseconds();
         }
-		if(gamepad2.dpad_left && cdCheck(useMap2.dpad_left, 200)){ 
-            toggleMap2.dpad_left = toggle(toggleMap2.dpad_left);
-            useMap2.dpad_left = runtime.milliseconds();
-        }
-		if(gamepad2.dpad_right || Math.abs(gamepad2.left_stick_x) > 0.1){
-			toggleMap2.dpad_right = false;
-		}
     }
     public boolean cdCheck(double key, int cdTime){
         return runtime.milliseconds() - key > cdTime;

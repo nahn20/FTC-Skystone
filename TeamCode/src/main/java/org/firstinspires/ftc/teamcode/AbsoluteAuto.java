@@ -229,7 +229,7 @@ public class AbsoluteAuto extends LinearOpMode {
 		ldl.shoop.setPower(1);
 		ldl.zhoop.setPower(1);
 		ldl.uwu.setPower(-1);
-		sleepNotSleep(1600);
+		sleepNotSleep(2000);
 		ldl.shoop.setTargetPosition(0);
 		ldl.zhoop.setTargetPosition(0);
 		ldl.uwu.setPower(0);
@@ -255,6 +255,44 @@ public class AbsoluteAuto extends LinearOpMode {
 		ldl.shoop.setPower(0);
 		ldl.zhoop.setPower(0);
 	}
+	public void strafePull(int direction){
+		ldl.runWithoutEncoderDrive();
+		double powerA = 1;
+		double powerB = 0.5;
+		//direction == 1 //Turning front right
+		if(direction == -1){ //Turning front left
+			double temp = powerB;
+			powerB = powerA;
+			powerA = temp;
+		}
+		ldl.frontRight.setPower(powerA);
+		ldl.backRight.setPower(-powerA);
+		ldl.frontLeft.setPower(powerB);
+		ldl.backLeft.setPower(-powerB);
+		double start = runtime.milliseconds();
+    	while(runtime.milliseconds() - start < 2000 && opModeIsActive()){
+    	}
+		ldl.frontRight.setPower(powerA/2);
+		ldl.backRight.setPower(-powerA/2);
+		ldl.frontLeft.setPower(powerB/2);
+		ldl.backLeft.setPower(-powerB/2);
+		start = runtime.milliseconds();
+    	while(runtime.milliseconds() - start < 1000 && opModeIsActive()){
+    	}
+		ldl.powerDrive(0);
+	}
+	public void driveTo(int fl, int bl, int br, int fr, double p){ //Drives the robot to a certain set of encoder values
+        ldl.runToPosDrive();
+        ldl.frontLeft.setTargetPosition(fl);
+        ldl.backLeft.setTargetPosition(bl);
+        ldl.backRight.setTargetPosition(br);
+        ldl.frontRight.setTargetPosition(fr);
+        ldl.powerDrive(p);
+        double start = runtime.milliseconds();
+        while(Math.abs(ldl.frontLeft.getCurrentPosition()-fl) > 30 && Math.abs(ldl.backLeft.getCurrentPosition()-bl) > 30 && Math.abs(ldl.backRight.getCurrentPosition()-br) > 30 && Math.abs(ldl.frontRight.getCurrentPosition()-fr) > 30 && runtime.milliseconds() - start < 3000 && opModeIsActive()){
+        }
+        ldl.powerDrive(0);
+    }
     public void returnToMotorPos(int[] motorSave){ //Drives the robot to a certain set of encoder values
         ldl.runToPosDrive();
         ldl.frontLeft.setTargetPosition(motorSave[0]);

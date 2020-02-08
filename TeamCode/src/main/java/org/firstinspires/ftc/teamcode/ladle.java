@@ -22,16 +22,28 @@ public class ladle{
     //Big Boi Slides
     public DcMotor shoop = null; //Side verticaal slides
     public DcMotor zhoop = null;
-    public CRServo uwu = null; //Shooty outty slide out
+    public DcMotor uwu = null; //Shooty outty slide out
 
+	public int shoopMax = 4315;
+	public int zhoopMax = 4133;
+	public int uwuMax = 0;
+
+	public int uwuDeposit = 0;
+	public int uwuContained = 0; //Horizontal distance the slide can extend inside the chassis without smashing shit
+
+	public int shoopLoad = 0; //Position for loading a block
+	public int zhoopLoad = 0;
+
+	public int shoopMinClearance = 2000;
+	public int zhoopMinClearance = 2000;
+
+	public int shoopClearance = shoopMinClearance+(0.1*shoopMax); //Height for clearing physical obstacles. Need to go to this height to extend
+	public int zhoopClearance = zhoopMinClearance+(0.1*zhoopMax);
     //Intake wheels
     public DcMotor succ = null;
-    //numero threee
-    public DcMotor succc = null;
 
     //GRaap
-    public Servo iwantdie = null;
-    public Servo shootme = null;
+	public CRServo crGrap = null;
 
 
     //IMU//
@@ -66,29 +78,29 @@ public class ladle{
         //SLIIIIIIDE
         shoop = hwMap.dcMotor.get("shoop");
         zhoop = hwMap.dcMotor.get("zhoop");
-        uwu = hwMap.crservo.get("uwu");
+        uwu = hwMap.dcMotor.get("uwu");
         shoop.setDirection(DcMotor.Direction.REVERSE);
         shoop.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         zhoop.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+		uwu.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         shoop.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         zhoop.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+		uwu.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 		shoop.setTargetPosition(0);
 		zhoop.setTargetPosition(0);
+		uwu.setTargetPosition(0);
         shoop.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         zhoop.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+		uwu.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
 
         //SUUCCCCCC
         succ = hwMap.dcMotor.get("succ");
-        succc = hwMap.dcMotor.get("succc");
-        succc.setDirection(DcMotor.Direction.REVERSE);
+        succ.setDirection(DcMotor.Direction.FORWARD);
         succ.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        succc.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 
-        //GRAp
-        iwantdie = hwMap.servo.get("iwantdie");
-        //num six
-        shootme = hwMap.servo.get("shootme");
+		//Grap
+		crGrap = hwMap.crservo.get("crGrap");
 
         //IMU//
         imu = hwMap.get(BNO055IMU.class, "imu");

@@ -54,6 +54,10 @@ public class AbsoluteTeleOp extends LinearOpMode {
             //Player 2
             slide();
             flerp();
+			// telemetry.addData("frontLeft", ldl.frontLeft.getPower());
+			// telemetry.addData("backLeft", ldl.backLeft.getPower());
+			// telemetry.addData("backRight", ldl.backRight.getPower());
+			// telemetry.addData("frontRight", ldl.frontRight.getPower());
 			telemetry.update();
         }
     }
@@ -76,18 +80,19 @@ public class AbsoluteTeleOp extends LinearOpMode {
             //C            HHHHHHHHHHHH        AAAAAAAA        DDD   DD\\
             //C            HHH      HHH       AA      AA       DDD   DD\\
             //CCCCCCC      HHH      HHH      AA        AA      DDDDDDD \\
+            double mag = 0.25;
             if (gamepad1.dpad_up || (toggleMap1.right_bumper && theta > Math.PI / 4 && theta <= 3 * Math.PI / 4)) {
-                pX = -1;
-                pY = 1;
+                pX = mag;
+                pY = -mag;
             } else if (gamepad1.dpad_left || (toggleMap1.right_bumper && (theta > 3 * Math.PI / 4 || theta <= -3 * Math.PI / 4))) {
-                pX = -1;
-                pY = -1;
+                pX = 2*mag;
+                pY = 2*mag;
             } else if (gamepad1.dpad_down || (toggleMap1.right_bumper && theta < -Math.PI / 4 && theta >= -3 * Math.PI / 4)) {
-                pX = 1;
-                pY = -1;
+                pX = -mag;
+                pY = mag;
             } else if (gamepad1.dpad_right || (toggleMap1.right_bumper && theta > -Math.PI / 4 && theta <= Math.PI / 4 && !(stick_y == 0 && stick_x == 0))) {
-                pX = 1;
-                pY = 1;
+                pX = -2*mag;
+                pY = -2*mag;
             } else if (toggleMap1.right_bumper) {
                 pX = 0;
                 pY = 0;
@@ -144,17 +149,23 @@ public class AbsoluteTeleOp extends LinearOpMode {
 	int zhoopLockPos = 0;
 	int uwuLockPos = 0;
     public void slide(){
-		if(gamepad2.a && (ldl.uwu.getCurrentPosition() < 30) || gamepad2.left_bumper){ //Low load position
-			shoopLockPos = ldl.shoopLoad;
-			zhoopLockPos = ldl.zhoopLoad;
+		if(gamepad2.a){ //Low load position
+			uwuLockPos = 0;
+		}
+		if(toggleMap2.a && ldl.uwu.getCurrentPosition() < ldl.uwuContained){
+			shoopLockPos = 0;
+			zhoopLockPos = 0;
+			if(ldl.shoop.getCurrentPosition() < 20){
+				toggleMap2.a = false;
+			}
 		}
 		if(gamepad2.x){ //Medium load position
 			shoopLockPos = ldl.shoopClearance;
 			zhoopLockPos = ldl.zhoopClearance;
 		}
 		if(toggleMap2.x){
-			shoopLockPos = ldl.shoopDeposit;
-			if(Math.abs(shoopLockPos-ldl.shoopDeposit) < 20){
+			uwuLockPos = ldl.uwuDeposit;
+			if(Math.abs(uwuLockPos-ldl.uwuDeposit) < 20){
 				toggleMap2.x = false;
 			}
 		}
@@ -162,9 +173,12 @@ public class AbsoluteTeleOp extends LinearOpMode {
 			shoopLockPos = ldl.shoopMax;
 			zhoopLockPos = ldl.zhoopMax;
 		}
+		if(gamepad2.b){
+			uwuLockPos = 0;
+		}
 		shoopLockPos += Math.round(-gamepad2.right_stick_y*ldl.shoopMax*0.005);
 		zhoopLockPos += Math.round(-gamepad2.right_stick_y*ldl.zhoopMax*0.005);
-		uwuLockPos += Math.round(gamepad2.right_stick_x*ldl.uwuMax*0.01);
+		uwuLockPos += Math.round(gamepad2.right_stick_x*ldl.uwuMax*0.007);
 		if(Math.abs(gamepad2.right_stick_x) > 0.3){
 			toggleMap2.x = false;
 		}
@@ -175,8 +189,8 @@ public class AbsoluteTeleOp extends LinearOpMode {
 
 		ldl.shoop.setTargetPosition(shoopLockPos);
 		ldl.zhoop.setTargetPosition(zhoopLockPos);
-		boolean verticalClearance = dl.shoop.getCurrentPosition() > ldl.shoopMinClearance && ldl.zhoop.getCurrentPosition() > ldl.zhoopMinClearance;
-		if((verticalClearance || (!verticalClearance && uwuLockPos > ldl.uwuContained) || gamepad2.left_bumper){
+		boolean verticalClearance = ldl.shoop.getCurrentPosition() > ldl.shoopMinClearance && ldl.zhoop.getCurrentPosition() > ldl.zhoopMinClearance;
+		if((verticalClearance || (!verticalClearance && uwuLockPos > ldl.uwuContained) || gamepad2.left_bumper)){
 			ldl.uwu.setTargetPosition(uwuLockPos);
 		}
     }
@@ -201,14 +215,20 @@ public class AbsoluteTeleOp extends LinearOpMode {
         }
 		if(gamepad2.x && cdCheck(useMap2.x, 200)){ 
             toggleMap2.x = toggle(toggleMap2.x);
+			toggleMap2.a = false;
             useMap2.x = runtime.milliseconds();
+        }
+		if(gamepad2.a && cdCheck(useMap2.a, 200)){ 
+            toggleMap2.a = toggle(toggleMap2.a);
+			toggleMap2.x = false;
+            useMap2.a = runtime.milliseconds();
         }
 		if(gamepad2.dpad_left && cdCheck(useMap2.dpad_left, 200)){ 
             toggleMap2.dpad_left = toggle(toggleMap2.dpad_left);
             useMap2.dpad_left = runtime.milliseconds();
         }
 		if(gamepad2.dpad_right || Math.abs(gamepad2.left_stick_x) > 0.1){
-			toggleMap2.dpad_right = false;
+			toggleMap2.dpad_left = false;
 		}
     }
     public boolean cdCheck(double key, int cdTime){

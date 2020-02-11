@@ -24,21 +24,22 @@ public class ladle{
     public DcMotor zhoop = null;
     public DcMotor uwu = null; //Shooty outty slide out
 
-	public int shoopMax = 4315;
-	public int zhoopMax = 4133;
-	public int uwuMax = 0;
+	public int shoopMax = 4100; //3900
+	public int zhoopMax = 4100; //4100
+	public int uwuMax = 1056;
 
-	public int uwuDeposit = 0;
-	public int uwuContained = 0; //Horizontal distance the slide can extend inside the chassis without smashing shit
+	public int uwuDeposit = 850;
+	public int uwuBarelyOut = 600;
+	public int uwuContained = 40; //Horizontal distance the slide can extend inside the chassis without smashing shit
 
 	public int shoopLoad = 0; //Position for loading a block
 	public int zhoopLoad = 0;
 
-	public int shoopMinClearance = 2000;
-	public int zhoopMinClearance = 2000;
+	public int shoopMinClearance = 800;
+	public int zhoopMinClearance = 800;
 
-	public int shoopClearance = shoopMinClearance+(0.1*shoopMax); //Height for clearing physical obstacles. Need to go to this height to extend
-	public int zhoopClearance = zhoopMinClearance+(0.1*zhoopMax);
+	public int shoopClearance = 1000; //Height for clearing physical obstacles. Need to go to this height to extend
+	public int zhoopClearance = 1000;
     //Intake wheels
     public DcMotor succ = null;
 
@@ -80,6 +81,7 @@ public class ladle{
         zhoop = hwMap.dcMotor.get("zhoop");
         uwu = hwMap.dcMotor.get("uwu");
         shoop.setDirection(DcMotor.Direction.REVERSE);
+		uwu.setDirection(DcMotor.Direction.REVERSE);
         shoop.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         zhoop.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 		uwu.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);

@@ -165,15 +165,17 @@ public class AbsoluteAuto extends LinearOpMode {
 		targetsSkyStone.activate();
 		//Start\\
 
-		slideFuckExtend();
+		//slideFuckExtend();
 
         //This part does stuff to get to the blocks
+		/*
 		motorPos1 = saveMotorPos(); //Saves motor pos to return to later
 		scanForSkyStone(1, stoneTarget); //Slowly drives sideways to find sky stone
         motorPos2 = saveMotorPos();
         attackSkyStone();
         returnToMotorPos(motorPos2);
 		returnToMotorPos(motorPos1);
+		*/
         //This part brings the blocks back to the platform
 
     }

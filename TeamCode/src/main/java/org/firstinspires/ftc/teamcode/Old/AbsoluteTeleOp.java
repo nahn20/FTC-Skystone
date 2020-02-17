@@ -151,6 +151,10 @@ public class AbsoluteTeleOp extends LinearOpMode {
     public void slide(){
 		if(gamepad2.a){ //Low load position
 			uwuLockPos = 0;
+			if(shoopLockPos < ldl.shoopClearance || zhoopLockPos < ldl.zhoopClearance){ //Untested
+				shoopLockPos = ldl.shoopClearance;
+				zhoopLockPos = ldl.zhoopClearance;
+			}
 		}
 		if(toggleMap2.a && ldl.uwu.getCurrentPosition() < ldl.uwuContained){
 			shoopLockPos = 0;

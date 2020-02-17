@@ -3,38 +3,21 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.util.Range;
 import com.qualcomm.robotcore.hardware.DcMotor;
-
-import org.firstinspires.ftc.robotcore.external.ClassFactory;
-import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
-import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
-
-import org.firstinspires.ftc.robotcore.external.ClassFactory;
-import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
-import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
-import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 
 import static org.firstinspires.ftc.robotcore.external.navigation.AngleUnit.DEGREES;
 import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.XYZ;
 import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.YZX;
 import static org.firstinspires.ftc.robotcore.external.navigation.AxesReference.EXTRINSIC;
 import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection.BACK;
+
+import android.app.Activity;
+import android.graphics.Color;
+import android.view.View;
+import com.qualcomm.robotcore.hardware.ColorSensor;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -77,6 +60,8 @@ public class AutoWithoutVuforia extends LinearOpMode {
     public void runOpMode() {
         ldl.init(hardwareMap);
         ldl.imu();
+		ldl.resetSlides();
+
 
         ldl.resetDrive();
 		ldl.frontLeft.setTargetPosition(0);
@@ -84,6 +69,7 @@ public class AutoWithoutVuforia extends LinearOpMode {
 		ldl.backRight.setTargetPosition(0);
 		ldl.frontRight.setTargetPosition(0);
         ldl.runToPosDrive();
+		
 
 
         while (!opModeIsActive()) {
@@ -95,30 +81,36 @@ public class AutoWithoutVuforia extends LinearOpMode {
         startTime = runtime.milliseconds();
         //Start\\
 		// rotate(-Math.PI);
-		//Version 1
-
-        //driveTo(-1508, 1309, -2903, 1234, 0.3); //Drives in a straight line 2 tiles
+		/* //Drives in a straight line 2 tiles
+        driveTo(-1508, 1309, -2903, 1234, 0.3);
+		*/
+		/* //Grabs platform
 		driveTo(836, 848, 662, 703, 0.5); //Side drive
 		ldl.resetDrive();
 		driveWhileExtend(1014, -1044, 955, -984, 0.2);
-		// slideFuckExtend();
 		sleepNotSleep(5000);
 		slideFuckRetract();
-		while(opModeIsActive()){}
-
-		//Version 2
-		/*
-		driveTo(1056, -1091, 1068, -1060, 0.3);
-		slideFuckExtend();
-		//driveTo(-806, 774, -779, 808); //Values if reset
-		driveTo(0, 0, 0, 0, 0.3);
-		// rotate(-Math.PI/2);
-		// sleepNotSleep(1000);
 		*/
 
+		slideFuckExtend();
+		findAndGrabSkyStone();
+		sleepNotSleep(5000);
+		ldl.crGrap.setPower(1);
+		sleepNotSleep(200);
+		ldl.crGrap.setPower(0);
+		slideFuckRetract();
+		sleepNotSleep(1000);
 
-		// driveTo(-728, 935, 694, -392, 0.3);
-		// slideFuckRetract();
+		//Delete me
+		/*
+		slideFuckExtend();
+		double start = runtime.milliseconds();
+		while(runtime.milliseconds() - start < 20000 && opModeIsActive()){
+			boolean bleh = isSkyStone();
+		}
+		slideFuckRetract();
+		*/
+
 /*
         //This part does stuff to get to the blocks
         motorPos1 = saveMotorPos(); //Saves motor pos to return to later
@@ -249,6 +241,63 @@ public class AutoWithoutVuforia extends LinearOpMode {
         heading += fullRotationCount * (2 * Math.PI);
         return heading;
     }
+	float hsvValues[] = {0F, 0F, 0F};
+	final float values[] = hsvValues;
+	final double SCALE_FACTOR = 255;
+	public boolean isSkyStone() {
+		Color.RGBToHSV((int) (ldl.glitchColor.red() * SCALE_FACTOR), (int) (ldl.glitchColor.green() * SCALE_FACTOR), (int) (ldl.glitchColor.blue() * SCALE_FACTOR), hsvValues);
+		/*
+		telemetry.addData("Alpha", ldl.glitchColor.alpha());
+		telemetry.addData("Red  ", ldl.glitchColor.red());
+		telemetry.addData("Green", ldl.glitchColor.green());
+		telemetry.addData("Blue ", ldl.glitchColor.blue());
+		telemetry.addData("Hue", hsvValues[0]);
+		telemetry.addData("Saturation", hsvValues[1]); //0 gray > 1 primary color
+		telemetry.addData("Value", hsvValues[2]); //0 black > 100 bright
+		*/
+
+		telemetry.addData("Hue", hsvValues[0]);
+		telemetry.addData("Distance", ldl.glitchDist.getDistance(DistanceUnit.MM));
+		telemetry.update();
+
+		if(hsvValues[0] > 100 && ldl.glitchDist.getDistance(DistanceUnit.MM) < 45){
+			return true;
+		}
+		return false;
+	}
+
+	public void findAndGrabSkyStone() {
+		//Raises to not drag against block
+		shoopZhoopLift(200, 200, 500);
+		//Opens grabber
+		ldl.crGrap.setPower(1);
+		sleepNotSleep(1000);
+		ldl.crGrap.setPower(0);
+		//Finds the skystone
+		int pos = ldl.uwu.getCurrentPosition();
+		double start = runtime.milliseconds();
+		ldl.uwu.setPower(0.5);
+		ldl.uwu.setTargetPosition(ldl.uwuMax);
+		boolean isFound = isSkyStone();
+		while(!isFound && pos < ldl.uwuMax && runtime.milliseconds() - start < 5000 && opModeIsActive()){
+			telemetry.addData("hiya", "Did not find skystone!");
+			telemetry.update();
+			pos = ldl.uwu.getCurrentPosition();
+			isFound = isSkyStone();
+		}
+		//Extends a bit extra to center itself on skystone and lowers onto SkyStone
+		pos += 100; //Additional shift factor here
+		pos = Range.clip(pos, 0, ldl.uwuMax);
+		ldl.uwu.setTargetPosition(pos);
+		ldl.uwu.setPower(1);
+		shoopZhoopLift(ldl.shoopLoad, ldl.zhoopLoad, 2000);
+		start = runtime.milliseconds();
+		while(Math.abs(ldl.uwu.getCurrentPosition()-pos) > 20 && runtime.milliseconds() - start < 3000 && opModeIsActive()){}
+		//Grabs skystone
+		ldl.crGrap.setPower(-1);
+		sleepNotSleep(1000);
+		//Pull out game strongk
+		shoopZhoopLift(ldl.shoopClearance, ldl.zhoopClearance, 3000);
+		uwuExtend(ldl.uwuBarelyOut, 3000);
+	}
 }
-
-

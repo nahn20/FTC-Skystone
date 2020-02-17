@@ -28,15 +28,16 @@ public class ladle{
 	public int zhoopMax = 4100; //4100
 	public int uwuMax = 1056;
 
+	public int shoopMin = 0;
+	public int zhoopMin = 0;
+
 	public int uwuDeposit = 850;
 	public int uwuBarelyOut = 600;
-	public int uwuContained = 40; //Horizontal distance the slide can extend inside the chassis without smashing shit
 
-	public int shoopLoad = 0; //Position for loading a block
-	public int zhoopLoad = 0;
-
-	public int shoopMinClearance = 800;
-	public int zhoopMinClearance = 800;
+	public int uwuBoundsMinOut = 550; //Horizontal distance the slide can extend in without hitting the chassis
+	public int uwuBoundsContained = 40; //Horizontal distance the slide can extend inside the chassis without smashing shit
+	public int shoopBoundsClearance = 800;
+	public int zhoopBoundsClearance = 800;
 
 	public int shoopClearance = 1000; //Height for clearing physical obstacles. Need to go to this height to extend
 	public int zhoopClearance = 1000;
@@ -45,6 +46,9 @@ public class ladle{
 
     //GRaap
 	public CRServo crGrap = null;
+
+	public ColorSensor glitchColor = null;
+	public DistanceSensor glitchDist = null;
 
 
     //IMU//
@@ -85,15 +89,6 @@ public class ladle{
         shoop.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         zhoop.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 		uwu.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        shoop.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        zhoop.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-		uwu.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-		shoop.setTargetPosition(0);
-		zhoop.setTargetPosition(0);
-		uwu.setTargetPosition(0);
-        shoop.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        zhoop.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-		uwu.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
 
         //SUUCCCCCC
@@ -104,6 +99,9 @@ public class ladle{
 		//Grap
 		crGrap = hwMap.crservo.get("crGrap");
 
+		glitchColor = hwMap.get(ColorSensor.class, "glitch");
+		glitchDist = hwMap.get(DistanceSensor.class, "glitch");
+
         //IMU//
         imu = hwMap.get(BNO055IMU.class, "imu");
         //////////////////
@@ -111,6 +109,17 @@ public class ladle{
         //////////////////
 
     }
+	public void resetSlides(){
+        shoop.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        zhoop.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+		uwu.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+		shoop.setTargetPosition(shoopMin);
+		zhoop.setTargetPosition(zhoopMin);
+		uwu.setTargetPosition(0);
+        shoop.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        zhoop.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+		uwu.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+	}
     public void mecanumDrive(double pX, double pY, double pRot){
         frontLeft.setPower(pY + pRot);
         backLeft.setPower(pX - pRot);

@@ -59,12 +59,13 @@ public class StatesTeleOp extends LinearOpMode {
         ldl.imu();
 
         ldl.runWithoutEncoderDrive();
-
+		//Check if slides hold position when transitioned
         double startTime = 0;
         while(!opModeIsActive()){
             telemetry.addData("shoop position", ldl.shoop.getCurrentPosition());
             telemetry.addData("zhoop position", ldl.zhoop.getCurrentPosition());
 			telemetry.addData("uwu position", ldl.uwu.getCurrentPosition());
+			resetEncoders();
             telemetry.update();
         }
 		ldl.shoop.setPower(1);
@@ -73,10 +74,12 @@ public class StatesTeleOp extends LinearOpMode {
         startTime = runtime.milliseconds();
         while(opModeIsActive()){
             updateKeys();
-            //Player 1
-            drive();
-            //Player 2
+			drive();
+			suc();
+			slide();
+			flerp();
 			resetEncoders();
+			updateStack();
 			telemetry.update();
         }
     }
@@ -146,21 +149,25 @@ public class StatesTeleOp extends LinearOpMode {
         }
     }
     public void suc(){
-        if(toggleMap1.left_bumper && gamepad1.right_trigger == 0){
-            ldl.succ.setPower(1);
+		if(gamepad2.left_trigger > 0.1){ //Manual override by player 2
+			ldl.succ.setPower(gamepad2.left_trigger);
+			telemetry.addData("Intake", "Override, ON");
+		}
+		else if(gamepad2.right_trigger > 0.1){
+			ldl.succ.setPower(-gamepad2.right_trigger);
+			telemetry.addData("Intake", "Override, REVERSE");
+		}
+		//Player 1 control
+		else if(toggleMap1.left_bumper){
+			ldl.succ.setPower(1);
 			telemetry.addData("Intake", "ON");
-        }
-        else if(gamepad1.left_trigger > 0){
-            ldl.succ.setPower(gamepad1.left_trigger);
-			telemetry.addData("Intake", "ON");
-        }
-        if(gamepad1.right_trigger > 0){
-            ldl.succ.setPower(-gamepad1.right_trigger);
-			telemetry.addData("Intake", "OUTTAKING");
-        }
-		if(gamepad1.left_trigger == 0 && gamepad1.right_trigger == 0 && !toggleMap1.left_bumper){
+		}
+		else if(toggleMap1.right_bumper){
+			ldl.succ.setPower(-1);
+			telemetry.addData("Intake", "REVERSE");
+		}
+		else{
 			ldl.succ.setPower(0);
-			telemetry.addData("Intake", "OFF");
 		}
     }
     //Player 2
@@ -275,11 +282,23 @@ public class StatesTeleOp extends LinearOpMode {
     }
 	double holdPower = 0;
     public void flerp(){
-		if(!toggleMap2.dpad_left){
+		if(Math.abs(gamepad2.left_stick_x > 0.05)){
 			ldl.crGrap.setPower(gamepad2.left_stick_x);
+			toggleMap1.b = false;
+			toggleMap1.x = false;
 		}
-		if(toggleMap2.dpad_left){
+		//Player 1 stuff
+		else if(toggleMap1.b){
+			ldl.crGrap.setPower(1);
+			if(cdCheck(useMap1.b), 500){ //Release time for grabber
+				toggleMap1.b = false;
+			}
+		}
+		else if(toggleMap1.x){
 			ldl.crGrap.setPower(-1);
+		}
+		else{
+			ldl.crGrap.setPower(0);
 		}
     }
 	public void resetEncoders(){
@@ -288,13 +307,29 @@ public class StatesTeleOp extends LinearOpMode {
 				useMap2.b = runtime.milliseconds(); //Using useMap weirdly here
 			}
 			toggleMap2.b = true; //Using toggleMap weirdly here
-			telemetry.addData("WARNING", "RESETTING ENCODERS");
 			if(cdCheck(useMap2.b, 2000)){
+				telemetry.addData(">", "Encoders Successfully Reset");
 				ldl.resetSlides();
+			}
+			else{
+				telemetry.addData("WARNING", "RESETTING ENCODERS");
 			}
 		}
 		else{
 			toggleMap2.b = false;
+		}
+	}
+	public void updateStack(){
+		if(gamepad2.x){
+			stackHeight = 0;
+		}
+		if(gamepad2.dpad_up && cdCheck(gamepad2.dpad_up, 200)){
+			useMap1.dpad_up = runtime.milliseconds();
+			stackHeight++;
+		}
+		if(gamepad2.dpad_down && cdCheck(gamepad2.dpad_down, 200)){
+			useMap1.dpad_down = runtime.milliseconds();
+			stackHeight--;
 		}
 	}
     ////////////////////////////////
@@ -302,10 +337,25 @@ public class StatesTeleOp extends LinearOpMode {
     //[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[
 
     public void updateKeys(){
-		if(gamepad1.left_bumper && cdCheck(useMap1.left_bumper, 200)){ 
+		if(gamepad1.left_bumper && cdCheck(useMap1.left_bumper, 500)){ 
             toggleMap1.left_bumper = toggle(toggleMap1.left_bumper);
-            useMap1.left_bumper = runtime.milliseconds();
-        }
+			useMap1.left_bumper = runtime.milliseconds();
+			toggleMap1.right_bumper = false;
+		}
+		if(gamepad1.right_bumper && cdCheck(useMap1.right_bumper, 500)){ 
+            toggleMap1.right_bumper = toggle(toggleMap1.right_bumper);
+			useMap1.right_bumper = runtime.milliseconds();
+			toggleMap1.left_bumper = false;
+		}
+		if(gamepad1.x && cdCheck(useMap1.x, 500)){ 
+            toggleMap1.x = toggle(toggleMap1.x);
+			useMap1.x = runtime.milliseconds();
+		}
+		if(gamepad1.b && cdCheck(useMap1.b, 500)){ 
+            toggleMap1.b = toggle(toggleMap1.b);
+			useMap1.b = runtime.milliseconds();
+			toggleMap1.x = false;
+		}
     }
     public boolean cdCheck(double key, int cdTime){
         return runtime.milliseconds() - key > cdTime;

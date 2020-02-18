@@ -49,15 +49,13 @@ public class AutoWithoutVuforia extends LinearOpMode {
 
     double startTime = 0;
 
-    double skyX = 0; //Relative to robot
-    double skyZ = 0;
-
     int[] pos = new int[4];
     int[] motorPos1 = new int[4];
     int[] motorPos2 = new int[4];
 
     @Override
     public void runOpMode() {
+        //AutoTransitioner.transitionOnStop(this, "StatesTeleOp");
         ldl.init(hardwareMap);
         ldl.imu();
 		ldl.resetSlides();

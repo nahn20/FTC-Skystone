@@ -24,23 +24,25 @@ public class ladle{
     public DcMotor zhoop = null;
     public DcMotor uwu = null; //Shooty outty slide out
 
-	public int shoopMax = 4100; //3900
-	public int zhoopMax = 4100; //4100
-	public int uwuMax = 1056;
+	public int shoopMax = 4350; //4350
+	public int zhoopMax = 4350; //4350
+	public int uwuMax = 1500;
 
 	public int shoopMin = 0;
 	public int zhoopMin = 0;
 
-	public int uwuDeposit = 850;
-	public int uwuBarelyOut = 600;
+	public int uwuDeposit = 883;
+	public int uwuBarelyOut = 625;
+
+	public int grabReleaseTime = 300;
 
 	public int uwuBoundsMinOut = 550; //Horizontal distance the slide can extend in without hitting the chassis
-	public int uwuBoundsContained = 40; //Horizontal distance the slide can extend inside the chassis without smashing shit
-	public int shoopBoundsClearance = 800;
-	public int zhoopBoundsClearance = 800;
+	public int uwuBoundsContained = 60; //Horizontal distance the slide can extend inside the chassis without smashing shit
+	public int shoopBoundsClearance = 655; //655
+	public int zhoopBoundsClearance = 655; //655
 
-	public int shoopClearance = 1000; //Height for clearing physical obstacles. Need to go to this height to extend
-	public int zhoopClearance = 1000;
+	public int shoopClearance = 800; //Height for clearing physical obstacles. Need to go to this height to extend
+	public int zhoopClearance = 800;
     //Intake wheels
     public DcMotor succ = null;
 
@@ -49,6 +51,8 @@ public class ladle{
 
 	public ColorSensor glitchColor = null;
 	public DistanceSensor glitchDist = null;
+
+	public ColorSensor lineSensor = null;
 
 
     //IMU//
@@ -89,6 +93,12 @@ public class ladle{
         shoop.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         zhoop.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 		uwu.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+		shoop.setTargetPosition(shoop.getCurrentPosition());
+		zhoop.setTargetPosition(zhoop.getCurrentPosition());
+		uwu.setTargetPosition(uwu.getCurrentPosition());
+        shoop.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        zhoop.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+		uwu.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
 
         //SUUCCCCCC
@@ -101,6 +111,8 @@ public class ladle{
 
 		glitchColor = hwMap.get(ColorSensor.class, "glitch");
 		glitchDist = hwMap.get(DistanceSensor.class, "glitch");
+
+		lineSensor = hwMap.get(ColorSensor.class, "lineSensor");
 
         //IMU//
         imu = hwMap.get(BNO055IMU.class, "imu");

@@ -36,7 +36,7 @@ import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocaliz
  */
 
 
-@Autonomous(name="AutoWithoutVuforia", group="Pushboat")
+@Autonomous(name="AutoWithoutVuforia", group="main")
 public class AutoWithoutVuforia extends LinearOpMode {
     ladle ldl = new ladle();
     private ElapsedTime runtime = new ElapsedTime();
@@ -53,9 +53,11 @@ public class AutoWithoutVuforia extends LinearOpMode {
     int[] motorPos1 = new int[4];
     int[] motorPos2 = new int[4];
 
+	String allianceColor = "blue";
+
     @Override
     public void runOpMode() {
-        //AutoTransitioner.transitionOnStop(this, "StatesTeleOp");
+        AutoTransitioner.transitionOnStop(this, "StatesTeleOp");
         ldl.init(hardwareMap);
         ldl.imu();
 		ldl.resetSlides();
@@ -66,7 +68,7 @@ public class AutoWithoutVuforia extends LinearOpMode {
 		ldl.backLeft.setTargetPosition(0);
 		ldl.backRight.setTargetPosition(0);
 		ldl.frontRight.setTargetPosition(0);
-        ldl.runToPosDrive();
+		ldl.runToPosDrive();
 		
 
 
@@ -79,46 +81,88 @@ public class AutoWithoutVuforia extends LinearOpMode {
         startTime = runtime.milliseconds();
         //Start\\
 		// rotate(-Math.PI);
-		/* //Drives in a straight line 2 tiles
-        driveTo(-1508, 1309, -2903, 1234, 0.3);
-		*/
-		/* //Grabs platform
-		driveTo(836, 848, 662, 703, 0.5); //Side drive
-		ldl.resetDrive();
-		driveWhileExtend(1014, -1044, 955, -984, 0.2);
-		sleepNotSleep(5000);
-		slideFuckRetract();
-		*/
+		//Drives in a straight line 2 tiles
 
-		slideFuckExtend();
-		findAndGrabSkyStone();
-		sleepNotSleep(5000);
-		ldl.crGrap.setPower(1);
-		sleepNotSleep(200);
-		ldl.crGrap.setPower(0);
-		slideFuckRetract();
-		sleepNotSleep(1000);
 
-		//Delete me
+
+        //driveTo(-1250, 1250, -1250, 1250, 0.3);
+		driveTo(-300, 300, -300, 300, 0.3);
+
 		/*
-		slideFuckExtend();
-		double start = runtime.milliseconds();
-		while(runtime.milliseconds() - start < 20000 && opModeIsActive()){
-			boolean bleh = isSkyStone();
+		if(allianceColor == "red"){
+			int straight = 400;
+			driveTo(-straight, straight, -straight, straight, 0.4); //Drives to block line from wall
+			rotate(Math.PI/2, 2000);
+			straight = 400; //Untested
+			driveTo(-straight, straight, -straight, straight, 0.4);
+			rotate(0, 2000);
+			straight = 850; //Untested
+			driveTo(-straight, straight, -straight, straight, 0.4);
+			rotate(Math.PI/2, 2000);
 		}
-		slideFuckRetract();
+		if(allianceColor == "blue"){
+			int front = 1250;
+			driveTo(-front, front, -front, front, 0.4); //Drives to block line from wall
+			rotate(Math.PI/2, 2000);
+		}
+		//Extend and grab
+		slideFuckExtend(300);
+		sleepNotSleep(300);
+		findAndGrabSkyStone();
+		ldl.shoop.setPower(0);
+		ldl.zhoop.setPower(0);
+		ldl.uwu.setPower(0);
+		ldl.resetDrive();
+		ldl.runToPosDrive();
+		if(allianceColor == "red"){
+			rotate(Math.PI, 2000);
+			int front = 600;
+			driveTo(-front, front, -front, front, 0.4); //Drives to block line from wall
+			rotate(Math.PI/2, 2000);
+		}
+		if(allianceColor == "blue"){
+			rotate(Math.PI, 2000);
+			int front = 600;
+			driveTo(-front, front, -front, front, 0.4); //Drives to block line from wall
+			rotate(3*Math.PI/2, 2000);
+		}
+		ldl.shoop.setPower(1);
+		ldl.zhoop.setPower(1);
+		ldl.uwu.setPower(1);
+		shoopZhoopLift(ldl.shoopClearance, ldl.zhoopClearance, 2000);
+		uwuExtend(ldl.uwuDeposit, 2000);
+		shoopZhoopLift(ldl.shoopMin, ldl.zhoopMin, 2000);
+		if(allianceColor == "red"){
+			ldl.resetDrive();
+			ldl.runToPosDrive();
+			int back = -1635;
+			driveTo(-back, back, -back, back, 0.4);
+		}
+		if(allianceColor == "blue"){
+			ldl.resetDrive();
+			ldl.runToPosDrive();
+			int back = -1635;
+			driveTo(-back, back, -back, back, 0.4);
+		}
+		ldl.crGrap.setPower(1);
+		sleepNotSleep(1.5*ldl.grabReleaseTime);
+		ldl.crGrap.setPower(0);
+		if(allianceColor == "red"){
+
+		}
+		if(allianceColor == "blue"){
+			shoopZhoopLift(180, 180, 2000);
+			int front = -1400;
+			driveTo(-front, front, -front, front, 0.4);
+			shoopZhoopLift(0, 0, 2000);
+			front = -900;
+			driveTo(-front, front, -front, front, 0.4);
+		}
 		*/
 
-/*
-        //This part does stuff to get to the blocks
-        motorPos1 = saveMotorPos(); //Saves motor pos to return to later
-        scanForSkyStone(1, stoneTarget); //Slowly drives sideways to find sky stone
-        motorPos2 = saveMotorPos();
-        attackSkyStone();
-        returnToMotorPos(motorPos2);
-        returnToMotorPos(motorPos1);
-        //This part brings the blocks back to the platform
-        */
+
+
+
     }
 	public void driveWhileExtend(int fl, int bl, int br, int fr, double p){
         ldl.runToPosDrive();
@@ -128,21 +172,21 @@ public class AutoWithoutVuforia extends LinearOpMode {
         ldl.frontRight.setTargetPosition(fr);
         ldl.powerDrive(p);
 		double start = runtime.milliseconds();
-		slideFuckExtend();
+		slideFuckExtend(100);
         while(Math.abs(ldl.frontLeft.getCurrentPosition()-fl) > 30 && Math.abs(ldl.backLeft.getCurrentPosition()-bl) > 30 && Math.abs(ldl.backRight.getCurrentPosition()-br) > 30 && Math.abs(ldl.frontRight.getCurrentPosition()-fr) > 30 && runtime.milliseconds() - start < 5000 && opModeIsActive()){
         }
         ldl.powerDrive(0);
 	}
-    public void slideFuckExtend(){
+    public void slideFuckExtend(int lowerAmount){
 		shoopZhoopLift(ldl.shoopClearance, ldl.zhoopClearance, 2000);
 		uwuExtend(ldl.uwuBarelyOut, 2000);
-		shoopZhoopLift(ldl.shoopLoad, ldl.zhoopLoad, 500);
+		shoopZhoopLift(lowerAmount, lowerAmount, 500);
     }
     public void slideFuckRetract(){
 		shoopZhoopLift(ldl.shoopClearance, ldl.zhoopClearance, 2000);
 		uwuExtend(0, 2000);
 		sleepNotSleep(300);
-		shoopZhoopLift(ldl.shoopLoad, ldl.zhoopLoad, 2000);
+		shoopZhoopLift(ldl.shoopMin, ldl.zhoopMin, 2000);
     }
 	public void shoopZhoopLift(int shoopPos, int zhoopPos, double timeout){
 		ldl.shoop.setTargetPosition(shoopPos);
@@ -155,7 +199,34 @@ public class AutoWithoutVuforia extends LinearOpMode {
 		double start = runtime.milliseconds();
 		while(Math.abs(ldl.uwu.getCurrentPosition()-uwuPos) > 20 && runtime.milliseconds() - start < timeout && opModeIsActive()){}
 	}
-	
+	public void driveTime(String direction, double mag, double pRot, double time){
+		ldl.runWithoutEncoderDrive();
+		double start = runtime.milliseconds();
+		double pX = 0;
+		double pY = 0;
+		if (direction == "forward") {
+			pX = mag;
+			pY = -mag;
+		} else if (direction == "left") {
+			pX = mag;
+			pY = mag;
+		} else if (direction == "backward") {
+			pX = -mag;
+			pY = mag;
+		} else if (direction == "right") {
+			pX = -mag;
+			pY = -mag;
+		}
+		else{
+			telemetry.addData(">", "Oops, you're dumb");
+			telemetry.update();
+		}
+		ldl.mecanumDrive(pX, pY, pRot);
+		while(runtime.milliseconds()-start < time){}
+		ldl.powerDrive(0);
+		ldl.resetDrive();
+		ldl.runToPosDrive();
+	}
     public void driveTo(int fl, int bl, int br, int fr, double p){ //Drives the robot to a certain set of encoder values
         ldl.runToPosDrive();
         ldl.frontLeft.setTargetPosition(fl);
@@ -166,6 +237,7 @@ public class AutoWithoutVuforia extends LinearOpMode {
         double start = runtime.milliseconds();
         while(Math.abs(ldl.frontLeft.getCurrentPosition()-fl) > 30 && Math.abs(ldl.backLeft.getCurrentPosition()-bl) > 30 && Math.abs(ldl.backRight.getCurrentPosition()-br) > 30 && Math.abs(ldl.frontRight.getCurrentPosition()-fr) > 30 && runtime.milliseconds() - start < 3000 && opModeIsActive()){
         }
+		sleepNotSleep(200);
         ldl.powerDrive(0);
     }
     public void strafePull(int direction){
@@ -190,18 +262,36 @@ public class AutoWithoutVuforia extends LinearOpMode {
         motorSave[3] = ldl.frontRight.getCurrentPosition();
         return motorSave;
     }
-    public void rotate(double angle){ //Rotation is relative to starting gyro angle
+    public void rotate(double angle, int time){ //Rotation is relative to starting gyro angle. + for ccw, - for cw
 	//Positive is ccw
-        double kp = 1;
+        double kp = 0.5;
+		double ki = 0.03;
+		angleOverflow();
         double error = getHeading()-angle;
+		double previousError = error;
+		double integral = 0;
         double start = runtime.milliseconds();
-        while(runtime.milliseconds() - start < 2000 && opModeIsActive()){
-			telemetry.addData("error", error);
-			telemetry.update();
+		ldl.runWithoutEncoderDrive();
+        while(runtime.milliseconds() - start < time && opModeIsActive()){
+			angleOverflow();
 			error = getHeading()-angle;
-            ldl.mecanumDrive(0, 0, kp*error);
+			if((error<0 && previousError>0) || (error>0 && previousError<0)){
+				integral = 0;
+			}
+			double pRot = -(kp*error+ki*integral);
+			if(Math.abs(error) < 0.4){
+				integral += error;
+			}
+			previousError = error;
+			telemetry.addData("error", error);
+			telemetry.addData("p", -kp*error);
+			telemetry.addData("i", -ki*integral);
+			telemetry.update();
+            ldl.mecanumDrive(0, 0, pRot);
         }
 		ldl.powerDrive(0);
+		ldl.resetDrive();
+		ldl.runToPosDrive();
     }
     public void autoDrive(double theta, double magnitude, double pRot) {
         double modifiedTheta = theta + Math.PI / 4; //Got rid of a - angle here
@@ -257,45 +347,101 @@ public class AutoWithoutVuforia extends LinearOpMode {
 		telemetry.addData("Hue", hsvValues[0]);
 		telemetry.addData("Distance", ldl.glitchDist.getDistance(DistanceUnit.MM));
 		telemetry.update();
-
 		if(hsvValues[0] > 100 && ldl.glitchDist.getDistance(DistanceUnit.MM) < 45){
 			return true;
 		}
 		return false;
 	}
+	public boolean isLine(){
+		Color.RGBToHSV((int) (ldl.lineSensor.red() * SCALE_FACTOR), (int) (ldl.lineSensor.green() * SCALE_FACTOR), (int) (ldl.lineSensor.blue() * SCALE_FACTOR), hsvValues);
+		telemetry.addData("Hue", hsvValues[0]);
+		telemetry.update();
+				//Blue (200)									Red (35)
+		if(Math.abs(hsvValues[0]-200) < 20 || Math.abs(hsvValues[0]-35) < 20){
+			return true;
+		}
+		return false;
+	}
+	public void driveToXDistAway(double dist){ //Used for being within a certain dist of stone
+		ldl.runWithoutEncoderDrive();
+		double start = runtime.milliseconds();
+		
+		ldl.runWithoutEncoderDrive();
 
+		while(ldl.glitchDist.getDistance(DistanceUnit.MM) > 300 && runtime.milliseconds() - start < 2000){
+			double mag = 0.2;
+			double pX = -mag;
+			double pY = mag;
+			ldl.mecanumDrive(pX, pY, 0);
+		}
+		start = runtime.milliseconds();
+		while(ldl.glitchDist.getDistance(DistanceUnit.MM) > dist && runtime.milliseconds() - start < 1000){
+			double mag = 0.5;
+			double pX = -mag;
+			double pY = -mag;
+			ldl.mecanumDrive(pX, pY, 0);
+		}
+		ldl.powerDrive(0);
+		ldl.resetDrive();
+		ldl.runToPosDrive();
+	}
 	public void findAndGrabSkyStone() {
-		//Raises to not drag against block
-		shoopZhoopLift(200, 200, 500);
-		//Opens grabber
-		ldl.crGrap.setPower(1);
-		sleepNotSleep(1000);
-		ldl.crGrap.setPower(0);
+		// driveToXDistAway(20);
+		// sleepNotSleep(500);
 		//Finds the skystone
 		int pos = ldl.uwu.getCurrentPosition();
 		double start = runtime.milliseconds();
-		ldl.uwu.setPower(0.5);
+		ldl.uwu.setPower(1);
 		ldl.uwu.setTargetPosition(ldl.uwuMax);
-		boolean isFound = isSkyStone();
-		while(!isFound && pos < ldl.uwuMax && runtime.milliseconds() - start < 5000 && opModeIsActive()){
-			telemetry.addData("hiya", "Did not find skystone!");
+		int count = 0;
+		double start2 = runtime.milliseconds();
+		while(count < 3 && pos < ldl.uwuMax && runtime.milliseconds() - start < 5000 && opModeIsActive()){
+			boolean isFound = isSkyStone();
+			while(!isFound && pos < ldl.uwuMax && runtime.milliseconds() - start < 5000 && opModeIsActive()){
+				/* //Missing withoutEncoderDrive
+				double dist = 20;
+				double sensorDist = ldl.glitchDist.getDistance(DistanceUnit.MM);
+				double error = sensorDist - dist;
+				double kp = 0.1;
+				double mag = error*kp; //Not actually mag--sometimes negative
+				double pX = 0;
+				double pY = 0;
+				mag = Range.clip(mag, -0.5, 0.5);
+				if(allianceColor == "blue"){
+					pX = -mag;
+					pY = -mag;
+				}
+				if(allianceColor == "red"){
+					pX = mag;
+					pY = mag;
+				}
+				ldl.mecanumDrive(pX, pY, 0);
+				*/
+				pos = ldl.uwu.getCurrentPosition();
+				isFound = isSkyStone();
+			}
+			if(isFound){
+				count++;
+			}
+		}
+		if(count < 3){
+			telemetry.addData(">", "Failed Search");
 			telemetry.update();
-			pos = ldl.uwu.getCurrentPosition();
-			isFound = isSkyStone();
 		}
 		//Extends a bit extra to center itself on skystone and lowers onto SkyStone
-		pos += 100; //Additional shift factor here
-		pos = Range.clip(pos, 0, ldl.uwuMax);
-		ldl.uwu.setTargetPosition(pos);
-		ldl.uwu.setPower(1);
-		shoopZhoopLift(ldl.shoopLoad, ldl.zhoopLoad, 2000);
-		start = runtime.milliseconds();
-		while(Math.abs(ldl.uwu.getCurrentPosition()-pos) > 20 && runtime.milliseconds() - start < 3000 && opModeIsActive()){}
+		pos = ldl.uwu.getCurrentPosition();
+		if(pos > 800){
+			pos += 110; //Additional shift factor here
+			pos = Range.clip(pos, 0, ldl.uwuMax);
+		}
+		//ldl.uwu.setPower(1); //Add this if above power isn't 1
+		uwuExtend(pos, 2000);
+		shoopZhoopLift(ldl.shoopMin, ldl.zhoopMin, 2000);
 		//Grabs skystone
 		ldl.crGrap.setPower(-1);
-		sleepNotSleep(1000);
+		sleepNotSleep(1500);
 		//Pull out game strongk
-		shoopZhoopLift(ldl.shoopClearance, ldl.zhoopClearance, 3000);
-		uwuExtend(ldl.uwuBarelyOut, 3000);
+		shoopZhoopLift(ldl.shoopClearance, ldl.zhoopClearance, 2000);
+		uwuExtend(380, 4000);
 	}
 }

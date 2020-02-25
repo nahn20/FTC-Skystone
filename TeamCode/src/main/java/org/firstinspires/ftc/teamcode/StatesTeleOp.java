@@ -11,7 +11,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-@TeleOp(name="StatesTeleOp", group="Pushboat")
+@TeleOp(name="StatesTeleOp", group="main")
 public class StatesTeleOp extends LinearOpMode {
     ladle ldl = new ladle();
     toggleMap toggleMap1 = new toggleMap();
@@ -29,29 +29,14 @@ public class StatesTeleOp extends LinearOpMode {
     private ElapsedTime runtime = new ElapsedTime();
 
 	private int stackHeight = 0;
-	private int[] shoopStackHeight = new int[10];
-	private int[] zhoopStackHeight = new int[10];
-	shoopStackHeight[0] = 10;
-	shoopStackHeight[1] = 10;
-	shoopStackHeight[2] = 10;
-	shoopStackHeight[3] = 10;
-	shoopStackHeight[4] = 10;
-	shoopStackHeight[5] = 10;
-	shoopStackHeight[6] = 10;
-	shoopStackHeight[7] = 10;
-	shoopStackHeight[8] = 10;
-	shoopStackHeight[9] = 10;
-	zhoopStackHeight[0] = shoopStackHeight[0];
-	zhoopStackHeight[1] = shoopStackHeight[1];
-	zhoopStackHeight[2] = shoopStackHeight[2];
-	zhoopStackHeight[3] = shoopStackHeight[3];
-	zhoopStackHeight[4] = shoopStackHeight[4];
-	zhoopStackHeight[5] = shoopStackHeight[5];
-	zhoopStackHeight[6] = shoopStackHeight[6];
-	zhoopStackHeight[7] = shoopStackHeight[7];
-	zhoopStackHeight[8] = shoopStackHeight[8];
-	zhoopStackHeight[9] = shoopStackHeight[9];
-
+	// int[] shoopStackHeight = new int[]{450, 805, 1185, 1510, 1890, 2250, 2630, 3000, 3000, 3000};
+	// int[] zhoopStackHeight = new int[]{450, 805, 1185, 1510, 1890, 2250, 2630, 3000, 3000, 3000};
+	int[] shoopStackHeight = new int[]{650, 1005, 1385, 1710, 2090, 2450, 2830, 3030, 3500, 4350};
+	int[] zhoopStackHeight = new int[]{650, 1005, 1385, 1710, 2090, 2450, 2830, 3030, 3500, 4350};
+	////////////////////////////////////0    1    2     3     4     5     6     7     8     9 //789 untested
+	int shoopLockPos = 0;
+	int zhoopLockPos = 0;
+	int uwuLockPos = 0;
 
     @Override
     public void runOpMode(){
@@ -61,6 +46,7 @@ public class StatesTeleOp extends LinearOpMode {
         ldl.runWithoutEncoderDrive();
 		//Check if slides hold position when transitioned
         double startTime = 0;
+		//ldl.resetSlides(); //Delete me
         while(!opModeIsActive()){
             telemetry.addData("shoop position", ldl.shoop.getCurrentPosition());
             telemetry.addData("zhoop position", ldl.zhoop.getCurrentPosition());
@@ -68,9 +54,14 @@ public class StatesTeleOp extends LinearOpMode {
 			resetEncoders();
             telemetry.update();
         }
-		ldl.shoop.setPower(1);
-		ldl.zhoop.setPower(1);
-		ldl.uwu.setPower(1);
+		if(ldl.uwu.getCurrentPosition() < ldl.uwuBoundsContained){
+			uwuLockPos = 0;
+		}
+		else{
+			uwuLockPos = ldl.uwuDeposit;
+		}
+		shoopLockPos = ldl.shoopMin;
+		zhoopLockPos = ldl.zhoopMin;
         startTime = runtime.milliseconds();
         while(opModeIsActive()){
             updateKeys();
@@ -82,6 +73,9 @@ public class StatesTeleOp extends LinearOpMode {
 			updateStack();
 			telemetry.update();
         }
+		ldl.shoop.setTargetPosition(0);
+		ldl.zhoop.setTargetPosition(0);
+		ldl.uwu.setTargetPosition(0);
     }
     //Player 1
     public void drive() {
@@ -90,12 +84,9 @@ public class StatesTeleOp extends LinearOpMode {
         double pX = 0;
         double pY = 0;
         double pRot = 0;
-        if (toggleMap1.x) {
-            stick_x *= 0.5;
-            stick_y *= 0.5;
-        }
+		double rotMultiplier = 0.6;
         double theta = Math.atan2(stick_y, stick_x); //Arctan2 doesn't have bad range restriction
-        if (toggleMap1.right_bumper || gamepad1.dpad_up || gamepad1.dpad_right || gamepad1.dpad_left || gamepad1.dpad_down) {
+        if (gamepad1.dpad_up || gamepad1.dpad_right || gamepad1.dpad_left || gamepad1.dpad_down) {
             //CCCCCCC      HHH      HHH           AA           DDDDDDD \\
             //C            HHH      HHH          AAAA          DDD   DD\\
             //C            HHHHHHHHHHHH         AA  AA         DDD   DD\\
@@ -103,28 +94,25 @@ public class StatesTeleOp extends LinearOpMode {
             //C            HHH      HHH       AA      AA       DDD   DD\\
             //CCCCCCC      HHH      HHH      AA        AA      DDDDDDD \\
             double mag = 0.25;
-            if (gamepad1.dpad_up || (toggleMap1.right_bumper && theta > Math.PI / 4 && theta <= 3 * Math.PI / 4)) {
+            if (gamepad1.dpad_up) {
                 pX = mag;
                 pY = -mag;
-            } else if (gamepad1.dpad_left || (toggleMap1.right_bumper && (theta > 3 * Math.PI / 4 || theta <= -3 * Math.PI / 4))) {
+            } else if (gamepad1.dpad_left) {
                 pX = 2*mag;
                 pY = 2*mag;
-            } else if (gamepad1.dpad_down || (toggleMap1.right_bumper && theta < -Math.PI / 4 && theta >= -3 * Math.PI / 4)) {
+            } else if (gamepad1.dpad_down) {
                 pX = -mag;
                 pY = mag;
-            } else if (gamepad1.dpad_right || (toggleMap1.right_bumper && theta > -Math.PI / 4 && theta <= Math.PI / 4 && !(stick_y == 0 && stick_x == 0))) {
+            } else if (gamepad1.dpad_right) {
                 pX = -2*mag;
                 pY = -2*mag;
-            } else if (toggleMap1.right_bumper) {
-                pX = 0;
-                pY = 0;
-            }
-            pRot = -(gamepad1.right_trigger-gamepad1.left_trigger);
+			}
+            pRot = -rotMultiplier*(gamepad1.right_trigger-gamepad1.left_trigger);
             ldl.mecanumDrive(pX, pY, pRot);
         } else {
-            pRot = -0.6 * (gamepad1.right_trigger-gamepad1.left_trigger);
+            pRot = -0.6 * rotMultiplier*(gamepad1.right_trigger-gamepad1.left_trigger);
             if (gamepad1.left_stick_y == 0 && gamepad1.left_stick_x == 0) {
-                pRot = -(gamepad1.right_trigger-gamepad1.left_trigger);
+                pRot = -rotMultiplier*(gamepad1.right_trigger-gamepad1.left_trigger);
             }
             //double gyroAngle = getHeading(); //In radiants, proper rotation, yay!!11!!
             double gyroAngle = 0;
@@ -150,30 +138,27 @@ public class StatesTeleOp extends LinearOpMode {
     }
     public void suc(){
 		if(gamepad2.left_trigger > 0.1){ //Manual override by player 2
-			ldl.succ.setPower(gamepad2.left_trigger);
+			ldl.succ.setPower(-gamepad2.left_trigger);
 			telemetry.addData("Intake", "Override, ON");
 		}
 		else if(gamepad2.right_trigger > 0.1){
-			ldl.succ.setPower(-gamepad2.right_trigger);
+			ldl.succ.setPower(gamepad2.right_trigger);
 			telemetry.addData("Intake", "Override, REVERSE");
 		}
 		//Player 1 control
 		else if(toggleMap1.left_bumper){
-			ldl.succ.setPower(1);
+			ldl.succ.setPower(-1);
 			telemetry.addData("Intake", "ON");
 		}
 		else if(toggleMap1.right_bumper){
-			ldl.succ.setPower(-1);
+			ldl.succ.setPower(1);
 			telemetry.addData("Intake", "REVERSE");
 		}
 		else{
 			ldl.succ.setPower(0);
+			telemetry.addData("Intake", "OFF");
 		}
     }
-    //Player 2
-	int shoopLockPos = 0;
-	int zhoopLockPos = 0;
-	int uwuLockPos = 0;
 	int weirdRetractionVar = 0;
 	int weirdRetractionStage = 0;
     public void slide(){
@@ -181,31 +166,33 @@ public class StatesTeleOp extends LinearOpMode {
 		int zhoopPos = ldl.zhoop.getCurrentPosition();
 		int uwuPos = ldl.uwu.getCurrentPosition();
 		boolean tooLow = (shoopPos < ldl.shoopBoundsClearance || zhoopPos < ldl.zhoopBoundsClearance);
-		if(Math.abs(gamepad1.right_stick_y) > 0 || Math.abs(gamepad1.right_stick_x) > 0){{
+		if(Math.abs(gamepad1.right_stick_y + gamepad2.right_stick_y) > 0 || Math.abs(gamepad1.right_stick_x + gamepad2.right_stick_x) > 0){
 			toggleMap1.y = false;
 			toggleMap1.a = false;
-			shoopLockPos += Math.round(-gamepad1.right_stick_y*ldl.shoopMax*0.005);
-			zhoopLockPos += Math.round(-gamepad1.right_stick_y*ldl.zhoopMax*0.005);
-			uwuLockPos += Math.round(gamepad1.right_stick_x*ldl.uwuMax*0.007);
+			shoopLockPos += Math.round(-(gamepad1.right_stick_y+gamepad2.right_stick_y)*ldl.shoopMax*0.005);
+			zhoopLockPos += Math.round(-(gamepad1.right_stick_y+gamepad2.right_stick_y)*ldl.zhoopMax*0.005);
+			if(!(gamepad1.right_stick_x + gamepad2.right_stick_x > 0 && shoopLockPos < ldl.shoopBoundsClearance && zhoopLockPos < ldl.shoopBoundsClearance) || gamepad2.y){
+				uwuLockPos += Math.round((gamepad1.right_stick_x+gamepad2.right_stick_x)*ldl.uwuMax*0.007);
+			}
 		}
 		if(gamepad1.y){ //Auto stack
 			toggleMap1.y = true;
 			toggleMap1.a = false;
-			if(shoopStackHeight[stackHeight] < uwu.shoopClearance || zhoopStackHeight[stackHeight] < uwu.zhoopClearance){ //If the thing has to lift, extend, then lower
-				shoopLockPos = shoopClearance;
-				zhoopLockPos = zhoopClearance;
+			if(shoopStackHeight[stackHeight] < ldl.shoopClearance || zhoopStackHeight[stackHeight] < ldl.zhoopClearance){ //If the thing has to lift, extend, then lower
+				shoopLockPos = ldl.shoopClearance;
+				zhoopLockPos = ldl.zhoopClearance;
 				uwuLockPos = ldl.uwuDeposit;
 			}
 			else{ //Regular lift
 				shoopLockPos = shoopStackHeight[stackHeight];
-				zhoopLockPos = zhoopStackHeight[zhoopHeight];
+				zhoopLockPos = zhoopStackHeight[stackHeight];
 			}
 		}
 		if(toggleMap1.y){
-			if(shoopStackHeight[stackHeight] < uwu.shoopClearance || zhoopStackHeight[stackHeight] < uwu.zhoopClearance){ //If the thing has to lift, extend, then lower
-				if(uwuPos > ldl.uwuBoundsMinOut){
+			if(shoopStackHeight[stackHeight] < ldl.shoopClearance || zhoopStackHeight[stackHeight] < ldl.zhoopClearance){ //If the thing has to lift, extend, then lower
+				if(uwuPos > ldl.uwuBarelyOut){
 					shoopLockPos = shoopStackHeight[stackHeight];
-					zhoopLockPos = zhoopStackHeight[zhoopHeight];
+					zhoopLockPos = zhoopStackHeight[stackHeight];
 					toggleMap1.y = false;
 					stackHeight++;
 				}
@@ -222,9 +209,18 @@ public class StatesTeleOp extends LinearOpMode {
 			toggleMap1.a = true;
 			toggleMap1.y = false;
 			weirdRetractionStage = 0; //Used for determining which stage of the 3 step process this is
-			shoopLockPos = shoopPos + 100;
-			zhoopLockPos = zhoopPos + 100;
-			weirdRetractionVar = shoopLockPos;
+			if(uwuPos > ldl.uwuBarelyOut){
+				shoopLockPos = shoopPos + 100;
+				zhoopLockPos = zhoopPos + 100;
+				if(shoopPos < ldl.shoopBoundsClearance){
+					shoopLockPos = ldl.shoopClearance;
+					zhoopLockPos = ldl.zhoopClearance;
+				}
+				weirdRetractionVar = shoopLockPos;
+			}
+			else{
+				weirdRetractionStage = 1;
+			}
 		}
 		if(toggleMap1.a){
 			if(weirdRetractionStage == 0){
@@ -275,14 +271,26 @@ public class StatesTeleOp extends LinearOpMode {
 			}
 		}
 		else if(gamepad2.y){ //Override mode
+			toggleMap1.y = false;
+			toggleMap1.a = false;
 			ldl.shoop.setTargetPosition(shoopLockPos);
 			ldl.zhoop.setTargetPosition(zhoopLockPos);
 			ldl.uwu.setTargetPosition(uwuLockPos);
 		}
+		if(gamepad2.a){
+			ldl.shoop.setPower(1);
+			ldl.zhoop.setPower(1);
+			ldl.uwu.setPower(1);
+		}
+		else{
+			ldl.shoop.setPower(0);
+			ldl.zhoop.setPower(0);
+			ldl.uwu.setPower(0);
+		}
     }
 	double holdPower = 0;
     public void flerp(){
-		if(Math.abs(gamepad2.left_stick_x > 0.05)){
+		if(Math.abs(gamepad2.left_stick_x) > 0.05){
 			ldl.crGrap.setPower(gamepad2.left_stick_x);
 			toggleMap1.b = false;
 			toggleMap1.x = false;
@@ -290,18 +298,23 @@ public class StatesTeleOp extends LinearOpMode {
 		//Player 1 stuff
 		else if(toggleMap1.b){
 			ldl.crGrap.setPower(1);
-			if(cdCheck(useMap1.b), 500){ //Release time for grabber
+			if(cdCheck(useMap1.b, ldl.grabReleaseTime)){ //Release time for grabber
 				toggleMap1.b = false;
 			}
 		}
 		else if(toggleMap1.x){
-			ldl.crGrap.setPower(-1);
+			ldl.crGrap.setPower(-0.5);
 		}
 		else{
 			ldl.crGrap.setPower(0);
 		}
     }
 	public void resetEncoders(){
+		//Telemetry - put into a button later
+		telemetry.addData("moop average", (ldl.shoop.getCurrentPosition()+ldl.zhoop.getCurrentPosition())/2);
+		telemetry.addData("shoop position", ldl.shoop.getCurrentPosition());
+		telemetry.addData("zhoop position", ldl.zhoop.getCurrentPosition());
+		telemetry.addData("uwu position", ldl.uwu.getCurrentPosition());
 		if(gamepad2.y && gamepad2.b){
 			if(!toggleMap2.b){
 				useMap2.b = runtime.milliseconds(); //Using useMap weirdly here
@@ -323,14 +336,18 @@ public class StatesTeleOp extends LinearOpMode {
 		if(gamepad2.x){
 			stackHeight = 0;
 		}
-		if(gamepad2.dpad_up && cdCheck(gamepad2.dpad_up, 200)){
-			useMap1.dpad_up = runtime.milliseconds();
+		if(gamepad2.dpad_up && cdCheck(useMap2.dpad_up, 200)){
+			useMap2.dpad_up = runtime.milliseconds();
 			stackHeight++;
 		}
-		if(gamepad2.dpad_down && cdCheck(gamepad2.dpad_down, 200)){
-			useMap1.dpad_down = runtime.milliseconds();
+		if(gamepad2.dpad_down && cdCheck(useMap2.dpad_down, 200)){
+			useMap2.dpad_down = runtime.milliseconds();
 			stackHeight--;
 		}
+		if(stackHeight >= 10){
+			stackHeight = 0;
+		}
+		telemetry.addData("Stack Height", stackHeight);
 	}
     ////////////////////////////////
     // TOGGLES ////////// USE MAP //
@@ -347,7 +364,7 @@ public class StatesTeleOp extends LinearOpMode {
 			useMap1.right_bumper = runtime.milliseconds();
 			toggleMap1.left_bumper = false;
 		}
-		if(gamepad1.x && cdCheck(useMap1.x, 500)){ 
+		if(gamepad1.x && cdCheck(useMap1.x, ldl.grabReleaseTime)){ 
             toggleMap1.x = toggle(toggleMap1.x);
 			useMap1.x = runtime.milliseconds();
 		}
@@ -355,6 +372,10 @@ public class StatesTeleOp extends LinearOpMode {
             toggleMap1.b = toggle(toggleMap1.b);
 			useMap1.b = runtime.milliseconds();
 			toggleMap1.x = false;
+		}
+		if(gamepad2.left_bumper){
+			toggleMap1.left_bumper = false;
+			toggleMap1.right_bumper = false;
 		}
     }
     public boolean cdCheck(double key, int cdTime){

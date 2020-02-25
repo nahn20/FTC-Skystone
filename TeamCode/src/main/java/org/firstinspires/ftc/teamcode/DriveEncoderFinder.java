@@ -11,7 +11,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-@TeleOp(name="DriveEncoderFinder", group="Pushboat")
+@TeleOp(name="DriveEncoderFinder", group="main")
 public class DriveEncoderFinder extends LinearOpMode {
     ladle ldl = new ladle();
     toggleMap toggleMap1 = new toggleMap();
@@ -43,6 +43,7 @@ public class DriveEncoderFinder extends LinearOpMode {
 			telemetry.addData("uwu position", ldl.uwu.getCurrentPosition());
             telemetry.update();
         }
+		ldl.resetSlides(); //Delete me
 		ldl.shoop.setPower(1);
 		ldl.zhoop.setPower(1);
 		ldl.uwu.setPower(1);
@@ -75,18 +76,19 @@ public class DriveEncoderFinder extends LinearOpMode {
         }
     }
     //Player 1
-	double flPos = 0;
-	double blPos = 0;
-	double brPos = 0;
-	double frPos = 0;
+	int flPos = 0;
+	int blPos = 0;
+	int brPos = 0;
+	int frPos = 0;
 	public void encoderDrive(double power){
         double stick_x = -gamepad1.left_stick_x;
         double stick_y = gamepad1.left_stick_y;
         double pX = 0;
         double pY = 0;
         double pRot = 0;
+		double rotMultiplier = 0.6;
         double theta = Math.atan2(stick_y, stick_x); //Arctan2 doesn't have bad range restriction
-        if (toggleMap1.right_bumper || gamepad1.dpad_up || gamepad1.dpad_right || gamepad1.dpad_left || gamepad1.dpad_down) {
+        if (gamepad1.dpad_up || gamepad1.dpad_right || gamepad1.dpad_left || gamepad1.dpad_down) {
             //CCCCCCC      HHH      HHH           AA           DDDDDDD \\
             //C            HHH      HHH          AAAA          DDD   DD\\
             //C            HHHHHHHHHHHH         AA  AA         DDD   DD\\
@@ -94,27 +96,25 @@ public class DriveEncoderFinder extends LinearOpMode {
             //C            HHH      HHH       AA      AA       DDD   DD\\
             //CCCCCCC      HHH      HHH      AA        AA      DDDDDDD \\
             double mag = 0.25;
-            if (gamepad1.dpad_up || (toggleMap1.right_bumper && theta > Math.PI / 4 && theta <= 3 * Math.PI / 4)) {
+            if (gamepad1.dpad_up) {
                 pX = mag;
                 pY = -mag;
-            } else if (gamepad1.dpad_left || (toggleMap1.right_bumper && (theta > 3 * Math.PI / 4 || theta <= -3 * Math.PI / 4))) {
+            } else if (gamepad1.dpad_left) {
                 pX = 2*mag;
                 pY = 2*mag;
-            } else if (gamepad1.dpad_down || (toggleMap1.right_bumper && theta < -Math.PI / 4 && theta >= -3 * Math.PI / 4)) {
+            } else if (gamepad1.dpad_down) {
                 pX = -mag;
                 pY = mag;
-            } else if (gamepad1.dpad_right || (toggleMap1.right_bumper && theta > -Math.PI / 4 && theta <= Math.PI / 4 && !(stick_y == 0 && stick_x == 0))) {
+            } else if (gamepad1.dpad_right) {
                 pX = -2*mag;
                 pY = -2*mag;
-            } else if (toggleMap1.right_bumper) {
-                pX = 0;
-                pY = 0;
-            }
-            pRot = -gamepad1.right_stick_x;
+			}
+            pRot = -rotMultiplier*(gamepad1.right_trigger-gamepad1.left_trigger);
+            ldl.mecanumDrive(pX, pY, pRot);
         } else {
-            pRot = -0.6 * gamepad1.right_stick_x;
+            pRot = -0.6 * rotMultiplier*(gamepad1.right_trigger-gamepad1.left_trigger);
             if (gamepad1.left_stick_y == 0 && gamepad1.left_stick_x == 0) {
-                pRot = -gamepad1.right_stick_x;
+                pRot = -rotMultiplier*(gamepad1.right_trigger-gamepad1.left_trigger);
             }
             //double gyroAngle = getHeading(); //In radiants, proper rotation, yay!!11!!
             double gyroAngle = 0;
@@ -135,14 +135,16 @@ public class DriveEncoderFinder extends LinearOpMode {
             pX = magnitude * Math.cos(modifiedTheta);
             pY = magnitude * Math.sin(modifiedTheta);
         }
-		flPos += (pY + pRot);
-		blPos += (pX - pRot);
-		brPos += (pY - pRot);
-		frPos += (pX + pRot);
+		int bleh = 50;
+		flPos += bleh*(pY + pRot);
+		blPos += bleh*(pX - pRot);
+		brPos += bleh*(pY - pRot);
+		frPos += bleh*(pX + pRot);
+
 		ldl.frontLeft.setTargetPosition(flPos);
-		ldl.backLeft.setTargetPosition(flPos);
-		ldl.backRight.setTargetPosition(flPos);
-		ldl.frontRight.setTargetPosition(flPos);
+		ldl.backLeft.setTargetPosition(blPos);
+		ldl.backRight.setTargetPosition(brPos);
+		ldl.frontRight.setTargetPosition(frPos);
 		ldl.powerDrive(power);
 	}
     public void drive() {
@@ -151,8 +153,9 @@ public class DriveEncoderFinder extends LinearOpMode {
         double pX = 0;
         double pY = 0;
         double pRot = 0;
+		double rotMultiplier = 0.6;
         double theta = Math.atan2(stick_y, stick_x); //Arctan2 doesn't have bad range restriction
-        if (toggleMap1.right_bumper || gamepad1.dpad_up || gamepad1.dpad_right || gamepad1.dpad_left || gamepad1.dpad_down) {
+        if (gamepad1.dpad_up || gamepad1.dpad_right || gamepad1.dpad_left || gamepad1.dpad_down) {
             //CCCCCCC      HHH      HHH           AA           DDDDDDD \\
             //C            HHH      HHH          AAAA          DDD   DD\\
             //C            HHHHHHHHHHHH         AA  AA         DDD   DD\\
@@ -160,28 +163,25 @@ public class DriveEncoderFinder extends LinearOpMode {
             //C            HHH      HHH       AA      AA       DDD   DD\\
             //CCCCCCC      HHH      HHH      AA        AA      DDDDDDD \\
             double mag = 0.25;
-            if (gamepad1.dpad_up || (toggleMap1.right_bumper && theta > Math.PI / 4 && theta <= 3 * Math.PI / 4)) {
+            if (gamepad1.dpad_up) {
                 pX = mag;
                 pY = -mag;
-            } else if (gamepad1.dpad_left || (toggleMap1.right_bumper && (theta > 3 * Math.PI / 4 || theta <= -3 * Math.PI / 4))) {
+            } else if (gamepad1.dpad_left) {
                 pX = 2*mag;
                 pY = 2*mag;
-            } else if (gamepad1.dpad_down || (toggleMap1.right_bumper && theta < -Math.PI / 4 && theta >= -3 * Math.PI / 4)) {
+            } else if (gamepad1.dpad_down) {
                 pX = -mag;
                 pY = mag;
-            } else if (gamepad1.dpad_right || (toggleMap1.right_bumper && theta > -Math.PI / 4 && theta <= Math.PI / 4 && !(stick_y == 0 && stick_x == 0))) {
+            } else if (gamepad1.dpad_right) {
                 pX = -2*mag;
                 pY = -2*mag;
-            } else if (toggleMap1.right_bumper) {
-                pX = 0;
-                pY = 0;
-            }
-            pRot = -gamepad1.right_stick_x;
+			}
+            pRot = -rotMultiplier*(gamepad1.right_trigger-gamepad1.left_trigger);
             ldl.mecanumDrive(pX, pY, pRot);
         } else {
-            pRot = -0.6 * gamepad1.right_stick_x;
+            pRot = -0.6 * rotMultiplier*(gamepad1.right_trigger-gamepad1.left_trigger);
             if (gamepad1.left_stick_y == 0 && gamepad1.left_stick_x == 0) {
-                pRot = -gamepad1.right_stick_x;
+                pRot = -rotMultiplier*(gamepad1.right_trigger-gamepad1.left_trigger);
             }
             //double gyroAngle = getHeading(); //In radiants, proper rotation, yay!!11!!
             double gyroAngle = 0;
@@ -207,6 +207,10 @@ public class DriveEncoderFinder extends LinearOpMode {
     }
 	public void reset(){
 		if(gamepad1.b){
+			flPos = 0;
+			blPos = 0;
+			brPos = 0;
+			frPos = 0;
 			ldl.resetDrive();
 			if(toggleMap1.y){
 				ldl.runWithoutEncoderDrive();
